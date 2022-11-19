@@ -1,0 +1,47 @@
+body {
+    overflow-x: hidden;
+    font: 400 14px/23px 'Montserrat';
+}
+
+a {
+    color: #ff5851;
+}
+
+.sidebar-light-primary .nav-sidebar>.nav-item>.nav-link.active {
+    background-color: #ff5851;
+}
+
+[class*=sidebar-light-] .nav-sidebar>.nav-item:hover>.nav-link:not(.active),
+[class*=sidebar-light-] .nav-treeview>.nav-item>.nav-link:focus,
+[class*=sidebar-light-] .nav-treeview>.nav-item>.nav-link:hover{
+    color: #ff5851;
+}
+
+.brand-link .brand-image {
+    float: none;
+    max-width: 200px;
+}
+
+.custom-file.is-invalid .custom-file-label {
+    border-color: #dc3545;
+}
+
+.hour1 {
+    left: 38px;
+    color: #00cb00;
+}
+
+.day1 {
+    left: 92px;
+    color: #4a50f3;
+}
+
+.week1 {
+    right: 44px;
+    color: #8942cb;
+}
+
+.month1 {
+    right: -15px;
+    color: #c50025;
+}

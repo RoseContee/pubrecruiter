@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>Truesite Extension</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+        <link rel="stylesheet" href="../plugins/css/bootstrap.min.css">
+        <link rel="stylesheet" href="../plugins/css/font-awesome.min.css">
+        <link rel="stylesheet" href="../css/style.css" type="text/css">
+
+        <script src="../plugins/js/jquery.min.js"></script>
+        <script src="../plugins/js/bootstrap.min.js"></script>
+        <script src="../js/popup.js"></script>
+    </head>
+    <body>
+        <div id="loading" class="overlay hidden">
+            <i class="fa fa-2x fa-spinner fa-spin"></i>
+        </div>
+        <div id="notifications" class="container pt-2 hidden">
+        </div>
+        <div class="container py-4">
+            <div class="splash-page blacklist-page nocontact-page contact-page pages hidden">
+                <div class="row mb-3">
+                    <div class="col-6">
+                        <button id="manage-account" class="btn btn-primary btn-sm">Manage Account</button>
+                    </div>
+                    <div class="col-6 text-right">
+                        <button id="logout" class="btn btn-danger btn-sm">Logout</button>
+                    </div>
+                </div>
+            </div>
+            <div class="opportunities-page manage-account-page pages hidden">
+                <div class="row">
+                    <div class="col-12 mb-2">
+                        <a href="#" id="back-to-contacts" class="text-danger ml-2">
+                            <i class="fa fa-chevron-left mr-1"></i> Back
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="auth-page pages">
+                <div class="row">
+                    <div class="offset-1 col-10">
+                        <div class="form-group my-4">
+                            <img src="../img/logo.png" class="img-fluid">
+                        </div>
+                        <div id="login-message" class="alert alert-danger alert-dismissible small hidden">
+                            <button type="button" class="close">&times;</button>
+                            <span></span>
+                        </div>
+                        <div class="form-group">
+                            <input type="email" id="login-email" class="form-control models" placeholder="Enter email">
+                            <div id="login-email-error" class="small text-danger hidden"></div>
+                        </div>
+                        <div class="form-group">
+                            <input type="password" id="login-password" class="form-control models" placeholder="Enter password">
+                            <div id="login-password-error" class="small text-danger hidden"></div>
+                        </div>
+                        <div class="text-center">
+                            <button id="login-button" class="btn btn-primary btn-block">Login</button>
+                            <p class="my-2"><a href="#" id="forgot-password">Forgot Password?</a></p>
+                            <p class="mb-0"><a href="#" id="new-account">Sign up for an account</a></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="splash-page pages hidden">
+                <div class="row">
+                    <div class="offset-1 col-10">
+                        <img src="../img/splash.gif" alt="welcome" title="Welcome" class="img-fluid">
+                    </div>
+                </div>
+            </div>
+            <div class="blacklist-page pages hidden">
+                <div class="row text-center mt-5 pt-4">
+                    <div class="col-12">
+                        <b id="blacklist-message">Not available at this time</b>
+                    </div>
+                </div>
+            </div>
+            <div class="nocontact-page pages hidden">
+                <div class="row text-center mt-5">
+                    <div class="col-12">
+                        <p class="font-weight-bold mb-1">Partnership Info Not Found</p>
+                    </div>
+                    <div class="col-12 mt-3">
+                        <div id="no-contact-success-loading" class="overlay hidden">
+                            <i class="fa fa-2x fa-check text-success"></i>
+                        </div>
+                        <div id="no-contact-failed-loading" class="overlay hidden">
+                            <i class="fa fa-2x fa-times text-danger"></i>
+                        </div>
+                        <a id="no-contact" href="#" class="btn text-primary disabled">
+                            <i class="fa fa-flag fa-2x"></i>
+                        </a>
+                    </div>
+                    <div class="col-12 mt-3">
+                        Hit the <b>Flag</b> icon once to let us know you want to partner up with this website!
+                    </div>
+                </div>
+            </div>
+            <div class="contact-page pages hidden">
+                <div class="row text-center">
+                    <div class="col-12">
+                        <p class="font-weight-bold mb-2"><span class="category">Creator</span> Contact Information</p>
+                    </div>
+                    <div class="col-12">
+                        <table class="table table-sm table-bordered table-hover table-striped mb-2">
+                            <tbody id="contact-info" class="text-left small"></tbody>
+                        </table>
+                    </div>
+                    <div class="col-12">
+                        <button id="add-favorite" class="btn btn-sm text-danger mb-2 hidden"><i class="fa"></i> <span></span></button>
+                    </div>
+                    <div class="col-12">
+                        <div id="inquiry-success-message" class="alert alert-success alert-dismissible small hidden">
+                            <button type="button" class="close">&times;</button>
+                            <span></span>
+                        </div>
+                        <button id="send-partnership-inquiry" class="btn btn-outline-primary btn-sm mb-2" disabled>Send Partnership Inquiry</button>
+                    </div>
+                    <div class="col-12">
+                        <div id="average-response-time" class="text-center small mb-2 hidden">Average Response Time: <b class=""></b></div>
+                    </div>
+                    <div class="col-12">
+                        <div id="feedback-form-container" class="mb-2 hidden">
+                            <a href="#" class="text-decoration-none" data-toggle="collapse" data-target="#feedback-form">
+                                Feedback <i class="fa fa-plus-circle"></i>
+                            </a>
+                            <div id="feedback-form" class="collapse text-left">
+                                <div id="feedback-error-message" class="alert alert-danger alert-dismissible small hidden">
+                                    <button type="button" class="close">&times;</button>
+                                    <span></span>
+                                </div>
+                                <div class="row mb-3">
+                                    <div class="col-4 small">
+                                        <i class="fa fa-clock-o"></i> Response Time
+                                    </div>
+                                    <div class="col-8 pr-4">
+                                        <input type="range" id="feedback-response-time" class="custom-range" min="0" max="4" value="0">
+                                        <div class="position-relative small font-weight-bold">
+                                            <span class="response-time hour1">1 Hour</span>
+                                            <span class="response-time day1">1 Day</span>
+                                            <span class="response-time week1">1 Week</span>
+                                            <span class="response-time month1">1 Month</span>
+                                        </div>
+                                        <div id="feedback-response-time-error" class="mt-2 small text-danger hidden"></div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-4 small">
+                                        <i class="fa fa-comment"></i> Comment
+                                    </div>
+                                    <div class="col-8">
+                                        <textarea id="feedback-comment" class="form-control" rows="1"></textarea>
+                                        <div id="feedback-comment-error" class="small text-danger hidden"></div>
+                                    </div>
+                                </div>
+                                <div class="row mt-2">
+                                    <div class="col-12 text-right">
+                                        <button id="feedback-submit-button" class="btn btn-sm btn-primary" disabled>Submit</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="feedback-success-message" class="alert alert-success alert-dismissible small hidden">
+                            <button type="button" class="close">&times;</button>
+                            <span></span>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <p id="site-contact-message" class="small font-italic mb-0 hidden"></p>
+                    </div>
+                    <div id="ads-support" class="col-12 mt-3 hidden">
+                        <a href="" target="_blank"><img src="" class="img-fluid" alt="Ads"></a>
+                        <p class="small mb-0 font-weight-bold">Support us by checking out our sponsor</p>
+                    </div>
+                </div>
+            </div>
+            <div class="opportunities-page pages hidden">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="text-center font-weight-bold mb-3">
+                            Opportunities
+                        </div>
+                        <div id="opportunities-success-message" class="alert alert-success alert-dismissible small hidden">
+                            <button type="button" class="close">&times;</button>
+                            <span></span>
+                        </div>
+                        <div id="opportunities-error-message" class="alert alert-danger alert-dismissible small hidden">
+                            <button type="button" class="close">&times;</button>
+                            <span></span>
+                        </div>
+                        <div class="input-group">
+                            <div class="form-control font-weight-bold border-0 p-0 small text-center">Description</div>
+                            <div class="input-group-append">
+                                <span class="input-group-text bg-white font-weight-bold border-0 p-0 small">Price</span>
+                                <span class="input-group-text bg-white font-weight-bold border-0 p-0 small">Select</span>
+                            </div>
+                        </div>
+                        <div id="opportunities-list"></div>
+                        <div id="opportunities-error" class="small text-danger hidden"></div>
+                        <button id="opportunities-inquiry-button" class="btn btn-primary btn-sm btn-block mt-3">Send Inquiry</button>
+                        <p class="small text-center mt-3 mb-0">
+                            If you successfully agree to an opportunity,<br>
+                            Pub Recruiter recommends a 10% bounty.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="manage-account-page pages hidden">
+                <div class="row">
+                    <div class="offset-1 col-10">
+                        <div class="form-group mb-3 text-center font-weight-bold">
+                            Change Password
+                        </div>
+                        <div id="account-password-success-message" class="alert alert-success alert-dismissible small hidden">
+                            <button type="button" class="close">&times;</button>
+                            <span></span>
+                        </div>
+                        <div id="account-password-error-message" class="alert alert-danger alert-dismissible small hidden">
+                            <button type="button" class="close">&times;</button>
+                            <span></span>
+                        </div>
+                        <div class="form-group">
+                            <input type="password" id="account-current-password" class="form-control models" placeholder="Current password">
+                            <div id="account-current-password-error" class="small text-danger hidden"></div>
+                        </div>
+                        <div class="form-group">
+                            <input type="password" id="account-password" class="form-control models" placeholder="Enter password">
+                            <div id="account-password-error" class="small text-danger hidden"></div>
+                        </div>
+                        <div class="form-group">
+                            <input type="password" id="account-password-confirm" class="form-control models" placeholder="Confirm password">
+                        </div>
+                        <div class="text-center">
+                            <button id="update-password-button" class="btn btn-primary btn-sm btn-block">Update</button>
+                        </div>
+                    </div>
+                </div>
+                <hr>
+                <div class="row">
+                    <div class="offset-1 col-10">
+                        <div class="form-group mb-3 text-center font-weight-bold">
+                            Request Publisher
+                        </div>
+                        <div id="request-publisher-success-message" class="alert alert-success alert-dismissible small hidden">
+                            <button type="button" class="close">&times;</button>
+                            <span></span>
+                        </div>
+                        <div id="request-publisher-error-message" class="alert alert-danger alert-dismissible small hidden">
+                            <button type="button" class="close">&times;</button>
+                            <span></span>
+                        </div>
+                        <div class="form-group">
+                            <textarea id="request-publisher-message" class="form-control" rows="2" placeholder="Message ..."></textarea>
+                            <div id="request-publisher-message-error" class="small text-danger hidden"></div>
+                        </div>
+                        <div class="text-center">
+                            <button id="request-publisher-button" class="btn btn-primary btn-sm btn-block">Submit</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

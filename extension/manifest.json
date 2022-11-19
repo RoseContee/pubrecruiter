@@ -1,0 +1,32 @@
+{
+    "name": "Pub Recruiter",
+    "description": "Pub Recruiter",
+    "version": "1.0.0",
+    "manifest_version": 3,
+    "icons": {
+        "128": "/img/default-icon.png"
+    },
+    "background": {
+        "service_worker": "/js/background.js"
+    },
+    "action": {
+        "default_popup": "/html/popup.html"
+    },
+    "content_scripts" : [{
+        "matches": [
+            "https://www.youtube.com/*",
+            "https://www.facebook.com/*",
+            "https://twitter.com/*",
+            "https://www.tiktok.com/*"
+        ],
+        "js": ["/js/content-scripts/influencer.js"]
+
+    }],
+    "permissions": ["tabs", "activeTab", "storage"],
+    "host_permissions": [
+        "*://extension.pubrecruiter.com/*"
+    ],
+    "content_security_policy": {
+        "extension_pages": "script-src 'self'; object-src 'self'"
+    }
+}

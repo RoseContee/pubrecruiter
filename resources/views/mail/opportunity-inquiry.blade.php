@@ -1,0 +1,101 @@
+<table align="center" width="690" border="0" cellspacing="0" cellpadding="0" bgcolor="#ffffff"
+       style="font-family:Helvetica,Arial,sans-serif!important">
+    <tbody>
+    <tr>
+        <td height="16"></td>
+    </tr>
+    <tr>
+        <td align="center" width="100%">
+            <a href="{{ route('dashboard') }}" target="_blank">
+                <img src="{{ asset('public/'.$data['site_logo']) }}"
+                     alt="{{ $data['site_name'] }}" border="0" width="200" style="display:block">
+            </a>
+        </td>
+    </tr>
+    <tr>
+        <td height="16"></td>
+    </tr>
+    <tr>
+        <td>
+            <table width="100%" border="0" align="center" cellpadding="0" cellspacing="0" bgcolor="#ffffff"
+                   style="border:1px solid #dedede;border-radius:3px">
+                <tbody>
+                <tr>
+                    <td align="left" valign="top">
+                        <table width="560" align="center" border="0" cellspacing="0" cellpadding="0">
+                            <tbody>
+                            <tr>
+                                <td height="56"></td>
+                            </tr>
+                            <tr>
+                                <td style="color:#000000;font-family:Helvetica,Arial,sans-serif;font-size:16px;font-weight:normal;line-height:1.5">
+                                    {{ $data['name'] }} has let us know that they are interested in placement/sponsorship opportunities with you!
+                                </td>
+                            </tr>
+                            <tr>
+                                <td height="24"></td>
+                            </tr>
+                            <tr>
+                                <td style="color:#000000;font-family:Helvetica,Arial,sans-serif;font-size:16px;font-weight:normal;line-height:1.5">
+                                    Here’s the opportunities they are interested in:<br>
+                                    @foreach ($data['opportunities'] as $i => $opportunity)
+                                        <b>{{ $opportunity['description'] }}</b><br>
+                                        @if ($i + 1 < count($data['opportunities'])) And @endif
+                                    @endforeach
+                                </td>
+                            </tr>
+                            <tr>
+                                <td height="24"></td>
+                            </tr>
+                            <tr>
+                                <td style="color:#000000;font-family:Helvetica,Arial,sans-serif;font-size:16px;font-weight:normal;line-height:1.5">
+                                    You can reach them via email here:<br>
+                                    <a href="mailto:{{ $data['email'] }}">{{ $data['email'] }}</a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td height="24"></td>
+                            </tr>
+                            <tr>
+                                <td style="color:#000000;font-family:Helvetica,Arial,sans-serif;font-size:16px;font-weight:normal;line-height:1.5">
+                                    If you choose to move forward with the opportunity, include us in the conversation!
+                                    We make commissions on our effort to help you and brands find new opportunity.
+                                </td>
+                            </tr>
+                            <tr>
+                                <td height="24"></td>
+                            </tr>
+                            <tr>
+                                <td style="color:#000000;font-family:Helvetica,Arial,sans-serif;font-size:16px;font-weight:normal;line-height:1.5">
+                                    Thank you,<br>
+                                    {{ $data['site_name'] }}<br>
+                                    +<br>
+                                    {{ $data['name'] }}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td height="56"></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </td>
+    </tr>
+    <tr>
+        <td height="24"></td>
+    </tr>
+    <tr>
+        <td align="center">
+            <span style="color:#75787d;font-family:Helvetica,Arial,sans-serif;font-size:13px;font-weight:normal;line-height:1.5">
+                © {{ date('Y') }} {{ $data['site_name'] }}. All Rights Reserved.
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td height="24"></td>
+    </tr>
+    </tbody>
+</table>
