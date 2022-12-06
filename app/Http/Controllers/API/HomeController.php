@@ -39,12 +39,15 @@ class HomeController extends Controller
                 ->domain($domain)
                 ->first();
             if ($item) {
-                $commission = '';
-                if ($item['type'] == 'Brand' && $item['commission']) {
-                    $commission .= $item['commission_type'] == '$' ? '$' : '';
-                    $commission .= $item['commission'];
-                    $commission .= $item['commission_type'] == '%' ? '%' : '';
-                    $commission .= ' '.$item['commission_unit'];
+                $commission = $affiliate_link = '';
+                if ($item['type'] == 'Brand') {
+                    if ($item['commission']) {
+                        $commission .= $item['commission_type'] == '$' ? '$' : '';
+                        $commission .= $item['commission'];
+                        $commission .= $item['commission_type'] == '%' ? '%' : '';
+                        $commission .= ' '.$item['commission_unit'];
+                    }
+                    $affiliate_link = str_replace('{USERID}', $user['id'], $contact['exclusive_deal']);
                 }
                 $opportunities = [];
                 if ($item['type'] == 'Creator') {
@@ -84,6 +87,7 @@ class HomeController extends Controller
                     'opportunities' => json_encode($opportunities),
                     'inquiry'       => $inquiry,
                     'favorite'      => $favorite,
+                    'affiliate_link' => $affiliate_link,
                     'response_time' => $response_time,
                     'feedback'      => $feedback,
                 ];

@@ -137,6 +137,7 @@ Route::group([
                 'feedback'      => 'FeedbackController',
                 'outreach'      => 'OutreachController',
                 'flag'          => 'FlagController',
+                'commissions'   => 'CommissionsController',
                 'opportunities' => 'OpportunityController',
                 'networks'      => 'NetworksController',
                 'sub'           => 'SubController',

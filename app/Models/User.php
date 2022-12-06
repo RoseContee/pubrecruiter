@@ -69,6 +69,10 @@ class User extends Authenticatable
         return $this->hasMany(Opportunity::class);
     }
 
+    public function commissions() {
+        return $this->hasMany(Commission::class);
+    }
+
     public function outreaches() {
         return $this->hasMany(Outreach::class);
     }

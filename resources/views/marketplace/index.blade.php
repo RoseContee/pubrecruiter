@@ -22,13 +22,13 @@
     <!--Main Start-->
     <main class="container pt-5 my-5">
         <div class="how-to-use mb-3">
-            <h4 class="text-center mb-4">Partnerships Marketplace</h4>
+            <h4 class="text-center mb-4"> Partnerships 🤝 Marketplace</h4>
             <div class="border border-dark px-3 py-2">
                 <div class="row">
                     <div class="col-lg-3 col-md-6 mb-3">
                         <span class="number">1</span>
-                        <h5 class="font-weight-bold">Create Account</h5>
-                        <p class="mb-1"><span class="creator">Creator</span>: (Affiliates, Publishers, Influencers)</p>
+                        <h5 class="font-weight-bold">Start Account</h5>
+                        <p class="mb-1"><span class="creator">Creators</span>: (Blogs, Influencers)</p>
                         <p class="mb-1"><span class="brand">Brands</span>: (Shops, Services)</p>
                     </div>
                     <div class="col-lg-3 col-md-6 mb-3">
@@ -39,13 +39,13 @@
                     </div>
                     <div class="col-lg-3 col-md-6 mb-3">
                         <span class="number">3</span>
-                        <h5 class="font-weight-bold">Request Partnerships</h5>
-                        <p class="mb-1">Found a potential partnership? Take action from the listing and they'll be notified!
+                        <h5 class="font-weight-bold">Track Partnerships</h5>
+                        <p class="mb-1">See a potential opportunity?  Request a partnership and they'll be a notified!
                     </div>
                     <div class="col-lg-3 col-md-6 mb-3">
                         <span class="number">4</span>
-                        <h5 class="font-weight-bold">Track Partnerships</h5>
-                        <p class="mb-1">Keep track of your requests within your account dashboard</p>
+                        <h5 class="font-weight-bold">Earn More 💸</h5>
+                        <p class="mb-1">Creators get exclusive access to Affiliate links and additional brand opportunities!</p>
                     </div>
                 </div>
             </div>

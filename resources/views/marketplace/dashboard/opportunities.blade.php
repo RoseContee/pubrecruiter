@@ -16,6 +16,46 @@
         <div class="card">
             <div class="card-header">
                 <h3 class="card-title">
+                    Affiliate Link Earnings
+                </h3>
+            </div>
+            <div class="card-body">
+                <div class="text-center">
+                    Total Unpaid Commissions: $<span id="total-unpaid">0</span>
+                </div>
+                <table id="commissions" class="table table-bordered table-striped table-hover">
+                    <thead>
+                    <tr>
+                        <th style="width:20px;">No</th>
+                        <th>Brand</th>
+                        <th>Confirmed Commission</th>
+                        <th>Date of Transaction</th>
+                        <th>Paid?</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    @php $total_unpaid = 0; @endphp
+                    @foreach ($commissions as $index => $commission)
+                        @php
+                            $confirmed_commission = $commission['commission'] + $commission['admin_commission'];
+                            if (!$commission['paid']) $total_unpaid += $confirmed_commission;
+                        @endphp
+                        <tr>
+                            <td>{{ ++$index }}</td>
+                            <td>{{ $commission['brand'] }}</td>
+                            <td>${{ $confirmed_commission ?: 0 }}</td>
+                            <td>{{ date('n/j/y', strtotime($commission['date'])) }}</td>
+                            <td>{{ $commission['paid'] ? 'Yes' : 'No' }}</td>
+                        </tr>
+                    @endforeach
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">
                     Media Kit Link
                 </h3>
             </div>
@@ -277,6 +317,33 @@
         const deleteOpportunityModal = $('#deleteOpportunityModal')
 
         $(function() {
+            $('#total-unpaid').text({{ $total_unpaid ?: 0 }})
+
+            $('#commissions').DataTable({
+                "responsive": true,
+                "lengthMenu": [10, 25, 50, 100, 250, 500],
+                "autoWidth": false,
+                "columnDefs": [{
+                    "sortable": false, "targets": [2],
+                }, {
+                    "searchable": false, "targets": [],
+                }],
+                "pagingType": "full_numbers",
+                "language": {
+                    "lengthMenu": "Display _MENU_ commissions per page",
+                    "zeroRecords": "Opportunities not found",
+                    "info": "Showing _START_ to _END_ of _TOTAL_ commissions",
+                    "infoEmpty": "",
+                    "infoFiltered": "(from _MAX_ total)",
+                    "paginate": {
+                        "first": '<i class="fa fa-angle-double-left"></i>',
+                        "previous": '<i class="fa fa-angle-left"></i>',
+                        "next": '<i class="fa fa-angle-right"></i>',
+                        "last": '<i class="fa fa-angle-double-right"></i>'
+                    }
+                }
+            })
+
             $('#opportunities').DataTable({
                 "responsive": true,
                 "lengthMenu": [10, 25, 50, 100, 250, 500],

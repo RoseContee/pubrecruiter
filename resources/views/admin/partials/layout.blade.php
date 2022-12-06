@@ -113,6 +113,12 @@
                         </a>
                     </li>
                     <li class="nav-item">
+                        <a href="{{ route('admin.commissions.index') }}" class="nav-link @if ($menu == 'Commissions') active @endif">
+                            <i class="nav-icon fas fa-dollar-sign"></i>
+                            <p>Commissions</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
                         <a href="{{ route('admin.opportunities.index') }}" class="nav-link @if ($menu == 'Opportunities') active @endif">
                             <i class="nav-icon fas fa-dollar-sign"></i>
                             <p>Opportunities</p>

@@ -55,6 +55,10 @@ $(() => {
         AddFavorite()
     })
 
+    $(document).on('click', '#copy-affiliate-link', () => {
+        copyAffiliateLink()
+    })
+
     $(document).on('click', '#send-partnership-inquiry', () => {
         if (opportunity) GotoPage('opportunities')
         else SendPartnershipInquiry()
@@ -205,7 +209,7 @@ const LoadContact = async () => {
             let additional = '', opportunities = []
             if (category == 'Brand') {
                 $('.category-Brand').show(), $('.category-Creator').hide()
-                additional = 
+                additional =
                     `<div class ="row mt-2">
                         <div class="col-4 font-weight-bold">Network:</div>
                         <div class="col-8 word-break-all">
@@ -303,7 +307,7 @@ const GetNotification = () => {
         if (data.details.notifications.length) {
             let notifications_list = ''
             data.details.notifications.forEach(noti => {
-                notifications_list += 
+                notifications_list +=
                     `<div class="alert alert-info alert-dismissible notification small mb-1" style="display:block">
                         <button type="button" class="close" data-ref="${noti.id}">&times;</button>` +
                         (noti.opportunity ?
@@ -421,6 +425,39 @@ const AddFavorite = () => {
         }
         ToggleLoading(false)
     })
+}
+
+const copyAffiliateLink = () => {
+    if (contact && contact.affiliate_link) {
+        const value = contact.affiliate_link
+        if (navigator.clipboard) {
+            navigator.clipboard.writeText(value).then(function() {
+            }, function(err) {
+            })
+        } else {
+            if (fallbackCopyTextToClipboard(value)) {
+            }
+        }
+    }
+}
+
+function fallbackCopyTextToClipboard(text) {
+    let textArea = document.createElement("textarea")
+    textArea.value = text
+    textArea.style.top = "0"
+    textArea.style.left = "0"
+    textArea.style.position = "fixed"
+    document.body.appendChild(textArea)
+    textArea.focus()
+    textArea.select()
+    let copied = false
+    try {
+        document.execCommand('copy')
+        copied = true
+    } catch (err) {
+    }
+    document.body.removeChild(textArea)
+    return copied
 }
 
 const SendPartnershipInquiry = () => {

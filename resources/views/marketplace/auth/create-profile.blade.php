@@ -24,7 +24,7 @@
                         <a href="{{ route('join-as-brand') }}">Brand</a>
                     </h5>
                     <div class="profile-detail">
-                        <p>FREE</p>
+                        <p>🏪</p>
                         <a href="{{ route('join-as-brand') }}">Start <i class="fa fa-arrow-right"></i></a>
                     </div>
                 </div>
@@ -39,7 +39,7 @@
                         <a href="{{ route('join-as-creator') }}">Creator</a>
                     </h5>
                     <div class="profile-detail">
-                        <p>FREE</p>
+                        <p>📝</p>
                         <a href="{{ route('join-as-creator') }}">Start <i class="fa fa-arrow-right"></i></a>
                     </div>
                 </div>

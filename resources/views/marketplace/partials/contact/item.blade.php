@@ -54,11 +54,12 @@
             @endif
         </a>
         @if ($contact['type'] == 'Brand')
+            <button class="btn btn-main btn-sm btn-block text-truncate visibility-hidden mb-2">&nbsp;</button>
             <div class="position-relative mb-2">
                 @if ($contact['exclusive_deal'])
                     <div class="exclusive-info">
                         <a href="javascript:void(0);" data-toggle="tooltip"
-                           title="Our &quot;Exclusive Deal&quot; with the Brand makes it easier for you try the product or service for your content. Sharing the Deal is prohibited. &quot;Request Partnership&quot; alerts the Brand that you are interested in promoting their product. You can also use the &quot;Sign Up&quot; button to go to the Affiliate Network where the Brand is hosted.">
+                           title="Creators get expedited access to Affiliate links.  Share to earn when a user buys!">
                             <i class="fa fa-info-circle"></i>
                         </a>
                     </div>
@@ -66,13 +67,13 @@
                 @if (!auth()->check() && $contact['exclusive_deal'])
                     <button class="btn btn-main btn-sm btn-block text-truncate"
                        data-toggle="modal" data-target="#signinModal">
-                        Exclusive Deal
+                        Copy Affiliate Link <i class="fa fa-copy"></i>
                     </button>
                 @elseif ($contact['exclusive_deal'])
-                    <a href="{{ str_replace('{USERID}', auth()->id(), $contact['exclusive_deal']) }}"
-                       class="btn btn-main btn-sm btn-block text-truncate" target="_blank">
-                        Exclusive Deal
-                    </a>
+                    <button onclick="copyClipboard('{{ str_replace('{USERID}', auth()->id(), $contact['exclusive_deal']) }}')"
+                       class="btn btn-main btn-sm btn-block text-truncate">
+                        Copy Affiliate Link <i class="fa fa-copy"></i>
+                    </button>
                 @else
                     <button class="btn btn-main btn-sm btn-block text-truncate visibility-hidden">&nbsp;</button>
                 @endif
@@ -100,6 +101,7 @@
                 </button>
             @else
                 <button class="btn btn-main btn-sm btn-block text-truncate request-partnership"
+                   @if($contact['type'] == 'Brand') data-href="{{ str_replace('{USERID}', auth()->id(), $contact['network_link']) }}" @endif
                    data-ref="{{ $contact['id'] }}">
                     Request Partnership
                 </button>
@@ -109,20 +111,6 @@
                data-toggle="modal" data-target="#signinModal">
                 Request Partnership
             </button>
-        @endif
-        @if ($contact['type'] == 'Brand')
-            @if (auth()->check())
-                <a href="{{ str_replace('{USERID}', auth()->id(), $contact['network_link']) }}"
-                   class="btn btn-main btn-sm btn-block text-truncate network-signup"
-                   data-ref="{{ $contact['id'] }}" target="_blank">
-                    Affiliate Program Sign Up
-                </a>
-            @else
-                <button class="btn btn-main btn-sm btn-block text-truncate"
-                   data-toggle="modal" data-target="#signinModal">
-                    Affiliate Program Sign Up
-                </button>
-            @endif
         @endif
     </div>
 </div>

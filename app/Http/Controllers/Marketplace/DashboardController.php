@@ -92,7 +92,6 @@ class DashboardController extends Controller
     }
 
     public function updateOutbound(Request $request) {
-        logger($request);
         $user = auth()->user();
         if ($user['type'] != 'Brand') {
             return response()->json([
@@ -132,6 +131,7 @@ class DashboardController extends Controller
         return view('marketplace.dashboard.opportunities', [
             'info'          => $user['info'],
             'opportunities' => $user['opportunities'],
+            'commissions'   => $user['commissions'],
             'menu'          => 'Opportunities',
         ]);
     }
