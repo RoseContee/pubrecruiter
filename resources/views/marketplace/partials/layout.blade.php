@@ -18,7 +18,7 @@
     <link rel="stylesheet" href="{{ asset('public/assets/vendor/fonts/montserrat.css') }}">
 
     <!-- Custom style -->
-    <link rel="stylesheet" href="{{ asset('public/assets/marketplace/css/custom.css') }}">
+    <link rel="stylesheet" href="{{ asset('public/assets/marketplace/css/custom.css') }}?t={{ time() }}">
 
     @stack('style')
 </head>
@@ -65,7 +65,7 @@
 <!-- Bootstrap 4 -->
 <script src="{{ asset('public/assets/vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
 <!-- Custom -->
-<script src="{{ asset('public/assets/marketplace/js/custom.js') }}"></script>
+<script src="{{ asset('public/assets/marketplace/js/custom.js') }}?t={{ time() }}"></script>
 
 <script type="text/javascript">
     $(function() {
