@@ -20,8 +20,14 @@
                 </h3>
             </div>
             <div class="card-body">
-                <div class="text-center">
+                <div class="text-center mb-5 mb-sm-3">
                     Total Unpaid Commissions: $<span id="total-unpaid">0</span>
+                    <button id="request-payout" class="btn btn-main btn-sm float-right">
+                        <span class="mr-2" style="display: none;">
+                            <i class="fa fa-spinner fa-spin"></i>
+                        </span>
+                        Request Payout
+                    </button>
                 </div>
                 <table id="commissions" class="table table-bordered table-striped table-hover">
                     <thead>
@@ -37,7 +43,7 @@
                     @php $total_unpaid = 0; @endphp
                     @foreach ($commissions as $index => $commission)
                         @php
-                            $confirmed_commission = $commission['commission'] + $commission['admin_commission'];
+                            $confirmed_commission = $commission['commission'];
                             if (!$commission['paid']) $total_unpaid += $confirmed_commission;
                         @endphp
                         <tr>
@@ -109,8 +115,8 @@
                 @if (count($opportunities) < 5)
                     <div class="row mb-3">
                         <div class="col-12">
-                            <a href="javascript:void(0);"
-                               class="btn btn-main btn-sm add-opportunity">
+                            <a href="javascript:void(0);" id="add-opportunity"
+                               class="btn btn-main btn-sm">
                                 <i class="fa fa-plus-circle"></i> Add New
                             </a>
                         </div>
@@ -369,7 +375,27 @@
                 }
             })
 
-            $(document).on('click', '.add-opportunity', function() {
+            $(document).on('click', '#request-payout', function() {
+                let that = $(this)
+                that.attr('disabled', 'disabled').find('span').show()
+                $.ajax({
+                    url: '{{ route('request-payout') }}',
+                    method: 'POST',
+                    success(data) {
+                        if (data.success) {
+                            that.find('span').html('<i class="fa fa-check"></i>')
+                        } else {
+                            alert(data.message)
+                            that.removeAttr('disabled').find('span').html('<i class="fa fa-spinner fa-spin"></i>').hide()
+                        }
+                    },
+                    error(data) {
+                        location.reload()
+                    }
+                })
+            })
+
+            $(document).on('click', '#add-opportunity', function() {
                 initForm()
                 opportunityModal.find('h2').text('Add Opportunity')
                 opportunityForm.attr('action', add_link)

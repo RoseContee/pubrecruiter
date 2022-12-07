@@ -429,6 +429,7 @@ const AddFavorite = () => {
 
 const copyAffiliateLink = () => {
     if (contact && contact.affiliate_link) {
+        $('#copy-affiliate-link').html('<i class="fa fa-check"></i>').attr('disabled', 'disabled')
         const value = contact.affiliate_link
         if (navigator.clipboard) {
             navigator.clipboard.writeText(value).then(function() {
@@ -438,6 +439,9 @@ const copyAffiliateLink = () => {
             if (fallbackCopyTextToClipboard(value)) {
             }
         }
+        setTimeout(() => {
+            $('#copy-affiliate-link').html('Copy Affiliate Link <i class="fa fa-copy"></i>').removeAttr('disabled')
+        }, 1000)
     }
 }
 

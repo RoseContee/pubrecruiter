@@ -33,9 +33,20 @@
                 })
             })
 
+            @if (auth()->user()->type == 'Creator')
+                $(document).on('click', '.copy-affiliate-link', function() {
+                    const that = $(this)
+                    that.html('<i class="fa fa-check"></i>').attr('disabled', 'disabled')
+                    copyClipboard(that.data('link'))
+                    setTimeout(() => {
+                        that.html('Copy Affiliate Link <i class="fa fa-copy"></i>').removeAttr('disabled')
+					}, 1000)
+                })
+            @endif
+
             $(document).on('click', '.request-partnership:not(:disabled)', function() {
                 const that = $(this)
-                window.open(that.data('href'))
+                that.html('<i class="fa fa-spinner fa-spin"></i>').attr('disabled', 'disabled')
                 $.ajax({
                     url: '{{ route('request-partnership') }}',
                     method: 'POST',
@@ -53,7 +64,7 @@
                                         contact: $(this).data('ref'),
                                     }
                                 })
-                                that.html('<i class="fa fa-spinner fa-spin"></i>').attr('disabled', 'disabled')
+                                window.open(that.data('href'))
                             @endif
                         } else {
                             that.html('Request Partnership').removeAttr('disabled')

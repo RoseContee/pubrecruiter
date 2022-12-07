@@ -3,12 +3,15 @@
 namespace App\Http\Controllers\Marketplace;
 
 use App\Http\Controllers\Controller;
+use App\Mail\RequestPayout;
 use App\Models\Metric;
 use App\Models\Opportunity;
+use App\Models\Setting;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\Paginator;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 
 class DashboardController extends Controller
@@ -120,6 +123,38 @@ class DashboardController extends Controller
             'payment_sent' => $outreach['payment_sent'],
             'io_date' => $outreach['io_date'] ? date('n/j/y', strtotime($outreach['io_date'])) : '',
             'notes' => $outreach['notes'],
+        ]);
+    }
+
+    public function requestPayout(Request $request) {
+        $user = auth()->user();
+        if ($user['type'] != 'Creator') {
+            return response()->json([
+                'status' => 'Forbidden',
+            ], 403);
+        }
+        $commission = $user->commissions()->where('paid', false)->sum('commission');
+        if ($commission) {
+            try {
+                $setting = Setting::getSetting(['site_name', 'site_logo', 'partnership_email']);
+                $data = [
+                    'site_name'     => $setting['site_name'],
+                    'site_logo'     => $setting['site_logo'],
+                    'from_email'    => $setting['partnership_email'],
+                    'name'          => $user['name'],
+                    'email'         => $user['email'],
+                    'commission'    => $commission,
+                ];
+                Mail::to($setting['partnership_email'])->send(new RequestPayout($data));
+            } catch (\Exception $exception) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Sorry! Something went wrong. Please try again.',
+                ]);
+            }
+        }
+        return response()->json([
+            'success' => true,
         ]);
     }
 

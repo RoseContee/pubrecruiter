@@ -70,8 +70,8 @@
                         Copy Affiliate Link <i class="fa fa-copy"></i>
                     </button>
                 @elseif ($contact['exclusive_deal'])
-                    <button onclick="copyClipboard('{{ str_replace('{USERID}', auth()->id(), $contact['exclusive_deal']) }}')"
-                       class="btn btn-main btn-sm btn-block text-truncate">
+                    <button data-link="{{ str_replace('{USERID}', auth()->id(), $contact['exclusive_deal']) }}"
+                       class="btn btn-main btn-sm btn-block text-truncate copy-affiliate-link">
                         Copy Affiliate Link <i class="fa fa-copy"></i>
                     </button>
                 @else

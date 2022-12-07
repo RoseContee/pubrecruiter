@@ -47,7 +47,7 @@ class HomeController extends Controller
                         $commission .= $item['commission_type'] == '%' ? '%' : '';
                         $commission .= ' '.$item['commission_unit'];
                     }
-                    $affiliate_link = str_replace('{USERID}', $user['id'], $contact['exclusive_deal']);
+                    $affiliate_link = str_replace('{USERID}', $user['id'], $item['exclusive_deal']);
                 }
                 $opportunities = [];
                 if ($item['type'] == 'Creator') {

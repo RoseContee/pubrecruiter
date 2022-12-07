@@ -65,6 +65,7 @@ Route::group([
             Route::get('outbound'               , 'DashboardController@outbound')->name('outbound');
             Route::post('outbound'              , 'DashboardController@updateOutbound');
 
+            Route::post('request-payout'        , 'DashboardController@requestPayout')->name('request-payout');
             Route::get('opportunities'          , 'DashboardController@opportunities')->name('opportunities');
             Route::post('opportunities'         , 'DashboardController@storeOpportunity')->name('opportunities.store');
             Route::put('opportunities/{id}'     , 'DashboardController@updateOpportunity')->name('opportunities.update');

@@ -65,7 +65,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="commission">Creator Commission</label>
-                                    <input type="number" id="commission" name="commission" class="form-control @error('commission') is-invalid @enderror"
+                                    <input type="text" id="commission" name="commission" class="form-control @error('commission') is-invalid @enderror"
                                            value="{{ old('commission', $commission['commission']??'') }}" placeholder="Enter commission" required>
                                     @error('commission')
                                         <label for="commission" class="small text-danger font-weight-normal mb-0">{{ $message }}</label>
@@ -73,8 +73,8 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="admin_commission">Pub Recruiter Commission</label>
-                                    <input type="number" id="admin_commission" name="admin_commission" class="form-control @error('admin_commission') is-invalid @enderror"
-                                           value="{{ old('admin_commission', $commission['admin_commission']??'') }}" placeholder="Enter commission" required>
+                                    <input type="text" id="admin_commission" name="admin_commission" class="form-control @error('admin_commission') is-invalid @enderror"
+                                           value="{{ old('admin_commission', $commission['admin_commission']??'') }}" placeholder="Enter commission">
                                     @error('admin_commission')
                                         <label for="commission" class="small text-danger font-weight-normal mb-0">{{ $message }}</label>
                                     @enderror
