@@ -14,7 +14,7 @@ class Contact extends Model
         'type', 'name', 'email',
         'website', 'domain',
         'logo', 'network_id', 'network', 'network_link', 'tags',
-        'commission', 'commission_type', 'commission_unit', 'exclusive_deal',
+        'commission', 'commission_type', 'commission_unit', 'exclusive_deal', 'code',
         'offers', 'posts',
         'featured', 'active',
     ];

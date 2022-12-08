@@ -14,6 +14,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\View;
+use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 
 class ContactsController extends Controller
@@ -171,7 +172,8 @@ class ContactsController extends Controller
         $commission =
         $commission_type =
         $commission_unit =
-        $exclusive_deal = null;
+        $exclusive_deal =
+        $code = null;
         if ($owner) {
             $user = User::doesntHave('contact')
                 ->where('id', $owner)
@@ -212,6 +214,10 @@ class ContactsController extends Controller
                 $commission_unit = $request['commission_unit'] == 'custom' ? $request['commission_custom_unit'] : $request['commission_unit'];
             }
             $exclusive_deal = str_replace('+USERID+', '{USERID}', $request['exclusive_deal']);
+            if (empty($exclusive_deal)) $exclusive_deal = null;
+            do {
+                $code = Str::random(8);
+            } while (Network::where('code', $code)->exists());
         } else {
             $offers = !empty($request['offers']);
             $posts = !empty($request['posts']);
@@ -231,6 +237,7 @@ class ContactsController extends Controller
             'commission_type' => $commission_type,
             'commission_unit' => $commission_unit,
             'exclusive_deal'  => $exclusive_deal,
+            'code'          => $code,
             'offers'        => !empty($offers),
             'posts'         => !empty($posts),
             'active'        => !empty($request['active']),

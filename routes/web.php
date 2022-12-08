@@ -163,3 +163,6 @@ Route::group([
         });
     });
 });
+
+
+Route::get('{code}', 'IndexController@mask')->name('mask');

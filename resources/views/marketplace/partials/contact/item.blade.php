@@ -70,7 +70,7 @@
                         Copy Affiliate Link <i class="fa fa-copy"></i>
                     </button>
                 @elseif ($contact['exclusive_deal'])
-                    <button data-link="{{ str_replace('{USERID}', auth()->id(), $contact['exclusive_deal']) }}"
+                    <button data-link="{{ route('mask', ['code' => $contact['code'], 't' => auth()->id()]) }}"
                        class="btn btn-main btn-sm btn-block text-truncate copy-affiliate-link">
                         Copy Affiliate Link <i class="fa fa-copy"></i>
                     </button>

@@ -31,6 +31,7 @@ class CreateContactsTable extends Migration
             $table->string('commission_type', 1)->nullable();
             $table->string('commission_unit')->nullable();
             $table->string('exclusive_deal')->nullable();
+            $table->string('code', 8);
             $table->boolean('offers')->default(false);
             $table->boolean('posts')->default(false);
             $table->boolean('active')->default(true);
