@@ -197,3 +197,17 @@ function short_format_number($n) {
     }
     return $n;
 }
+
+function encrypt_affiliate($code, $userId) {
+    $string = "{$code}:{$userId}";
+    return base64_encode($string);
+}
+
+function decrypt_affiliate($encryption) {
+    $string = base64_decode($encryption);
+    $temp = explode(':', $string);
+    return [
+        'code' => $temp[0],
+        'userId' => $temp[1] ?? '',
+    ];
+}

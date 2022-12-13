@@ -8,8 +8,10 @@ use Illuminate\Http\Request;
 
 class IndexController extends Controller
 {
-    public function mask($code, Request $request) {
-        $user = User::find($request['t']);
+    public function mask($code) {
+        $temp = decrypt_affiliate($code);
+        $code = $temp['code']; $userId = $temp['userId'];
+        $user = User::find($userId);
         if (!$user) abort(404);
         $contact = Contact::brand()->where('code', $code)->first();
         if (!$contact) abort(404);
