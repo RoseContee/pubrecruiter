@@ -243,11 +243,11 @@ class DashboardController extends Controller
             return back()->withErrors($validator)->withInput();
         }
         $user->outreaches()->create([
-            'name'          => $request['name'],
-            'email'         => $request['email'],
-            'description'   => $request['description'],
-            'manual'        => true,
-            'seen'          => true,
+            'name'      => $request['name'],
+            'email'     => $request['email'],
+            'notes'     => $request['description'],
+            'manual'    => true,
+            'seen'      => true,
         ]);
         return redirect()->route('outbound')->with('success_message', 'New outreach created!');
     }
@@ -286,7 +286,7 @@ class DashboardController extends Controller
         }
         $outreach['name'] = $request['name'];
         $outreach['email'] = $request['email'];
-        $outreach['description'] = $request['description'];
+        $outreach['notes'] = $request['description'];
         $outreach->save();
         return back()->with('success_message', 'Outreach information updated!');
     }

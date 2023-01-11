@@ -1,7 +1,8 @@
 @extends('marketplace.dashboard.layout')
 
 @php
-$add = empty($outreach);
+    $add = empty($outreach);
+    $brand_user = auth()->user()->type == 'Brand';
 @endphp
 @section('title', ($add ? 'Add' : 'Edit').' Outreach')
 
@@ -29,7 +30,7 @@ $add = empty($outreach);
                                     @endif
                                     <fieldset>
                                         <div class="form-group">
-                                            <label for="name">Brand Name</label>
+                                            <label for="name">{{ $brand_user ? 'Name of website' : 'Brand Name' }}</label>
                                             <input type="text" id="name" name="name"
                                                    class="form-control @error('name') is-invalid @enderror"
                                                    placeholder="Name" required
@@ -49,7 +50,7 @@ $add = empty($outreach);
                                             @enderror
                                         </div>
                                         <div class="form-group">
-                                            <label for="description">Description</label>
+                                            <label for="description">{{ $brand_user ? 'Notes' : 'Description' }}</label>
                                             <input type="text" id="description" name="description"
                                                    class="form-control @error('description') is-invalid @enderror"
                                                    placeholder="Description" required

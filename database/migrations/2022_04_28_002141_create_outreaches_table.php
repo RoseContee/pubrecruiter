@@ -25,7 +25,6 @@ class CreateOutreachesTable extends Migration
             $table->string('notes', 75)->nullable();
             $table->string('name')->nullable();
             $table->string('email')->nullable();
-            $table->string('description')->nullable();
             $table->boolean('manual')->default(false);
             $table->boolean('seen')->default(false);
             $table->timestamps();

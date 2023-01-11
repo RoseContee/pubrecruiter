@@ -58,16 +58,13 @@
                                 <th class="py-1" style="width:60px;">Payment Sent?</th>
                                 <th style="width:100px;">IO Date</th>
                                 <th>Notes</th>
-                                @if ($menu == 'Outbound')
-                                    <th>Description</th>
-                                @endif
                                 <th style="width:0"></th>
                             @endif
                         @endif
-                        @if ($manual)
-                            <th>Description</th>
-                        @endif
                         @if (!$opportunity || !$brand_user)
+                            @if ($manual)
+                                <th>Description</th>
+                            @endif
                             <th style="width:100px;">Date</th>
                         @endif
                         @if ($manual)
@@ -122,9 +119,6 @@
                                         @endif
                                     </td>
                                     <td class="notes">{{ $partnership['notes'] }}</td>
-                                    @if ($manual)
-                                        <td>@if ($partnership['manual']) {{ $partnership['description'] }} @endif</td>
-                                    @endif
                                     <td>
                                         @if ($manual)
                                             <a href="{{ route('edit-outreach', $partnership['id']) }}" class="btn text-main p-0">
@@ -139,10 +133,10 @@
                                     </td>
                                 @endif
                             @endif
-                            @if ($manual)
-                                <td>@if ($partnership['manual']) {{ $partnership['description'] }} @endif</td>
-                            @endif
                             @if (!$opportunity || !$brand_user)
+                                @if ($manual)
+                                    <td>@if ($partnership['manual']) {{ $partnership['notes'] }} @endif</td>
+                                @endif
                                 <td>
                                     {{ date('n/j/y', strtotime($partnership['created_at'])) }}
                                 </td>

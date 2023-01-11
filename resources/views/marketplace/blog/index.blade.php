@@ -28,14 +28,16 @@
             @if (count($blogs))
                 <div class="row">
                     @foreach ($blogs as $blog)
-                        <div class="col-sm-6 col-md-4">
-                            <a href="{{ route('blog-item', $blog['slug']) }}">
-                                <img src="{{ asset('public/'.$blog['image']) }}" alt="image" class="img-fluid">
-                            </a>
-                            <a href="{{ route('blog-item', $blog['slug']) }}" class="text-dark">
-                                <h5 class="pt-4">{{ $blog['title'] }}</h5>
-                                <p>{{ Str::limit($blog['short_content'], 200) }}</p>
-                            </a>
+                        <div class="col-sm-6 col-md-4 col-lg-3">
+                            <div class="blog-item shadow p-3">
+                                <a href="{{ route('blog-item', $blog['slug']) }}">
+                                    <div class="text-center">
+                                        <img src="{{ asset('public/'.$blog['image']) }}" alt="image" class="img-fluid">
+                                    </div>
+                                    <h5 class="pt-4">{{ $blog['title'] }}</h5>
+                                    <p class="">{{ Str::limit($blog['short_content'], 200) }}</p>
+                                </a>
+                            </div>
                         </div>
                     @endforeach
                 </div>

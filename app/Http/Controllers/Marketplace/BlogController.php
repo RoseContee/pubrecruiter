@@ -10,7 +10,7 @@ class BlogController extends Controller
 {
     public function blog() {
         $blogs = Blog::orderBy('created_at', 'desc')
-            ->paginate(1);
+            ->paginate(12);
         return view('marketplace.blog.index', [
             'blogs' => $blogs,
         ]);

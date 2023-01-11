@@ -12,7 +12,7 @@ class Outreach extends Model
     protected $fillable = [
         'user_id', 'contact_id', 'owner_id', 'owner_type',
         'opportunities', 'payment_sent', 'io_date', 'notes',
-        'name', 'email', 'description', 'manual', 'seen',
+        'name', 'email', 'manual', 'seen',
     ];
 
     public function scopeWhose($query, $user_id) {

@@ -5,8 +5,8 @@
 @section('header-menu')
     <ul class="navbar-nav align-items-center justify-content-around ml-auto">
         <li class="nav-item">
-            <a href="{{ route('blog') }}" class="btn font-weight-bold mr-3">
-                Blog
+            <a href="{{ route('create-profile') }}" class="btn font-weight-bold mr-3">
+                Join
             </a>
         </li>
         <li class="nav-item">
@@ -52,7 +52,7 @@
             <div class="row">
                 <div class="col-md-6 col-lg-8 d-flex align-items-center">
                     <div class="text-dark">
-                        <h2 class="mb-3 mb-md-5">Built For Partnership Marketer</h2>
+                        <h2 class="mb-3 mb-md-5">Built For Partnership Marketers</h2>
                         <p>There are two important functions in driving an Affiliate Program's overall success:
                             <b>Optimization and Growth</b></p>
                         <p>We aim to solve the largest problems in the space:</p>
@@ -90,7 +90,7 @@
                         <img src="{{ asset('public/assets/images/home/4.png') }}" alt="image" class="w-100">
                     </div>
                     <h5 class="mt-3">TRACK OUTREACH</h5>
-                    <p class="text-dark">Log outreach dates, notes, note if an IO has been signed,
+                    <p class="text-dark">Log outreach dates, add notes, check off if an IO has been signed,
                         even manually add your own Affiliate Partnership outreaches within your dashboard</p>
                 </div>
                 <div class="col-md-4">
