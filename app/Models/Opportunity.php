@@ -10,7 +10,7 @@ class Opportunity extends Model
     use HasFactory;
 
     protected $fillable = [
-        'user_id', 'description', 'cost_type', 'cost',
+        'user_id', 'description', 'cost_type', 'cost', 'expiry',
     ];
 
     public function user() {

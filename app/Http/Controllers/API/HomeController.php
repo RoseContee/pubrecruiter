@@ -47,7 +47,7 @@ class HomeController extends Controller
                         $commission .= $item['commission_type'] == '%' ? '%' : '';
                         $commission .= ' '.$item['commission_unit'];
                     }
-                    $affiliate_link = route('mask', ['code' => encrypt_affiliate($item['code'], $user_id)]);
+                    //$affiliate_link = route('mask', ['code' => encrypt_affiliate($item['code'], $user_id)]);
                 }
                 $opportunities = [];
                 if ($item['type'] == 'Creator') {

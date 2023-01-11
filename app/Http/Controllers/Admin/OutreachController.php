@@ -26,6 +26,7 @@ class OutreachController extends Controller
             ->has('user')
             ->has('contact')
             ->has('contact.user')
+            ->where('manual', false)
             ->get();
         foreach ($outreaches as $outreach) {
             if ($outreach['opportunities']) {

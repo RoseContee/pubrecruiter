@@ -93,6 +93,10 @@ class User extends Authenticatable
         return $this->hasMany(SubRecord::class);
     }
 
+    public function recommendations() {
+        return $this->hasMany(Recommendation::class);
+    }
+
     public function info() {
         return $this->hasOne(UserInfo::class);
     }

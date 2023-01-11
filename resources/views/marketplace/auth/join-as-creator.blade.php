@@ -7,9 +7,9 @@
     <main class="container py-5">
         <div class="row justify-content-center">
             <div class="col-12 col-md-10 col-lg-6">
-                <form action="" class="p-0 p-sm-5"
-                      method="POST" onsubmit="submitting()">
+                <form action="" class="p-0 p-sm-5" method="POST" onsubmit="submitting()">
                     @csrf
+                    <input type="hidden" name="claim" value="{{ old('claim') }}">
                     <div class="mb-4">
                         <h4>Start Your Creator Account</h4>
                     </div>
@@ -17,10 +17,12 @@
                         @if ($message = session('error_message'))
                             <div class="alert alert-danger alert-dismissible fade show">
                                 <span>{{ $message }}</span>
-                                <a href="javascript:void(0)" class="close" data-dismiss="alert" aria-label="Close"><i class="fa fa-close"></i></a>
+                                <a href="javascript:void(0)" class="close" data-dismiss="alert" aria-label="Close">
+                                    <i class="fa fa-close"></i>
+                                </a>
                             </div>
                         @endif
-                        <div class="form-group">
+                        <div class="form-group claim-profile">
                             <input type="email" id="email" name="email" required
                                    class="form-control @error('email') is-invalid @enderror"
                                    value="{{ old('email') }}" placeholder="Email">
@@ -28,7 +30,7 @@
                                 <label for="email" class="text-danger small">{{ $message }}</label>
                             @enderror
                         </div>
-                        <div class="form-group">
+                        <div class="form-group claim-profile">
                             <input type="password" id="password" name="password"
                                    class="form-control @error('password') is-invalid @enderror"
                                    placeholder="Password" required>
@@ -36,7 +38,7 @@
                                 <label for="password" class="text-danger small">{{ $message }}</label>
                             @enderror
                         </div>
-                        <div class="form-group">
+                        <div class="form-group claim-profile">
                             <input type="password" id="password_confirmation" name="password_confirmation"
                                    class="form-control @error('password_confirmation') is-invalid @enderror"
                                    placeholder="Confirm Password" required>
@@ -52,13 +54,16 @@
                                 <label for="website_name" class="text-danger small">{{ $message }}</label>
                             @enderror
                         </div>
+                        @php
+                            $claim = stripos($errors->has('domain'), 'We found your domain') !== false;
+                        @endphp
                         <div class="form-group">
                             <input type="url" id="website" name="website" required
                                    class="form-control @if ($errors->has('website') || $errors->has('domain')) is-invalid @endif"
                                    value="{{ old('website') }}" placeholder="Website or Social Media URL">
                             @if ($errors->has('website') || $errors->has('domain'))
                                 <label for="website" class="text-danger small">
-                                    {{ $errors->has('website') ? $errors->first('website') : $errors->first('domain') }}
+                                    {!! $errors->has('website') ? $errors->first('website') : $errors->first('domain') !!}
                                 </label>
                             @endif
                         </div>
@@ -77,7 +82,7 @@
                                 <label for="posts" class="cursor-pointer mb-0">Sponsored Posts</label>
                             </div>
                         </div>
-                        <div class="form-group">
+                        <div class="form-group claim-profile">
                             <label class="d-block">Do you want to display your profile for brands to see?</label>
                             <div class="d-flex">
                                 <div class="custom-control custom-radio w-100">
@@ -94,10 +99,10 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="form-group">
+                        <div class="form-group claim-profile">
                             <button type="submit" class="btn btn-main btn-block">Start</button>
                         </div>
-                        <div class="form-group text-center">
+                        <div class="form-group text-center claim-profile">
                             <a href="{{ route('login') }}" class="text-info">
                                 Already have an account? <span class="text-danger">Login</span>
                             </a>
@@ -112,6 +117,19 @@
 
 @push('script')
     <script type="text/javascript">
+        $(function() {
+            @if (old('claim') && !$errors->has('website_name') && !$errors->has('website') && !$errors->has('domain'))
+                $('.form-group:not(.claim-profile)').hide()
+            @else
+                $('[name=claim]').val('')
+            @endif
+
+            $(document).on('click', '#claim-profile', function() {
+                $('.form-group:not(.claim-profile)').hide()
+                $('[name=claim]').val('1')
+            })
+        })
+
         function submitting() {
             $('button[type="submit"]').attr('disabled', 'disabled')
             $(".preloader-outer").show()

@@ -13,6 +13,8 @@ Route::group([
 ], function() {
     //Homepage Route
     Route::get('/'                              , 'HomeController@index')->name('home')->middleware('noti');
+    Route::get('blog'                           , 'BlogController@blog')->name('blog');
+    Route::get('blog/{slug}'                    , 'BlogController@item')->name('blog-item');
 
     Route::group([
         'middleware' => ['auth'],
@@ -62,10 +64,19 @@ Route::group([
         ], function() {
             Route::get('dashboard'              , 'DashboardController@index')->name('dashboard');
 
+            Route::get('recommendation'         , 'DashboardController@recommendation')->name('recommendation');
+            Route::post('recommendation-partnership', 'DashboardController@recommendationPartnership')->name('recommendation-partnership');
+
+            Route::get('inbound'                , 'DashboardController@inbound')->name('inbound');
+
             Route::get('outbound'               , 'DashboardController@outbound')->name('outbound');
             Route::post('outbound'              , 'DashboardController@updateOutbound');
+            Route::get('new-outreach'           , 'DashboardController@newOutreach')->name('new-outreach');
+            Route::post('new-outreach'          , 'DashboardController@createOutreach');
+            Route::get('edit-outreach/{id}'     , 'DashboardController@editOutreach')->name('edit-outreach');
+            Route::put('edit-outreach/{id}'     , 'DashboardController@updateOutreach');
 
-            Route::post('request-payout'        , 'DashboardController@requestPayout')->name('request-payout');
+            //Route::post('request-payout'            , 'DashboardController@requestPayout')->name('request-payout');
             Route::get('opportunities'          , 'DashboardController@opportunities')->name('opportunities');
             Route::post('opportunities'         , 'DashboardController@storeOpportunity')->name('opportunities.store');
             Route::put('opportunities/{id}'     , 'DashboardController@updateOpportunity')->name('opportunities.update');
@@ -76,6 +87,8 @@ Route::group([
 
             Route::get('favorites'              , 'DashboardController@favorites')->name('favorites');
             Route::delete('remove-favorite'     , 'DashboardController@removeFavorite')->name('remove-favorite');
+
+            Route::get('resource'               , 'DashboardController@resource')->name('resource');
 
             Route::get('setting'                , 'DashboardController@setting')->name('setting');
             Route::put('setting'                , 'DashboardController@updateSetting');
@@ -138,12 +151,15 @@ Route::group([
                 'feedback'      => 'FeedbackController',
                 'outreach'      => 'OutreachController',
                 'flag'          => 'FlagController',
-                'commissions'   => 'CommissionsController',
+                //'commissions'   => 'CommissionsController',
                 'opportunities' => 'OpportunityController',
                 'networks'      => 'NetworksController',
                 'sub'           => 'SubController',
                 'referrals'     => 'ReferralsController',
                 'ads'           => 'AdsController',
+                'recommendations' => 'RecommendationsController',
+                'resource'      => 'ResourcesController',
+                'blogs'         => 'BlogsController',
             ], [
                 'as' => 'admin'
             ]);
@@ -165,4 +181,4 @@ Route::group([
 });
 
 
-Route::get('{code}', 'IndexController@mask')->name('mask');
+//Route::get('{code}', 'IndexController@mask')->name('mask');

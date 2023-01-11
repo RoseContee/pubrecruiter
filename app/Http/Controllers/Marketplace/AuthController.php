@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Mail\CreateUser;
 use App\Mail\ForgotPassword;
 use App\Mail\ResetPassword;
+use App\Models\Admin;
 use App\Models\Contact;
 use App\Models\Network;
 use App\Models\PasswordReset;
@@ -50,11 +51,6 @@ class AuthController extends Controller
                 $contact_email = Setting::getSetting('contact_email', 'Extension@PubRecruiter.com');
                 auth()->logout();
                 return back()->withInput()->with('error_message', 'Your account is not available.<br>Contact Us to Unlock<br>Email: <a href="mailto:' . $contact_email . '"><b>' . $contact_email . '</b></a>');
-            }
-            if ($user['type'] == 'Brand') {
-                return redirect()->route('creators');
-            } else if ($user['type'] == 'Creator') {
-                return redirect()->route('brands');
             }
             return redirect()->route('dashboard');
         }
@@ -157,7 +153,7 @@ class AuthController extends Controller
             //logger($exception->getMessage());
         }
         if (auth()->attempt($request->only(['email', 'password']))) {
-            return redirect()->route('creators');
+            return redirect()->route('dashboard');
         }
         return redirect()->route('login')->with('error_message', 'Credentials does not match.');
     }
@@ -180,18 +176,35 @@ class AuthController extends Controller
         $website = $request['website'];
         $domain = $request['domain'] = getDomain($website, $influencer);
         $rule = [
-            'domain' => ['required', 'unique:contacts,domain'],
+            'domain' => ['required'],
         ];
         $validator = Validator::make($request->all(), $rule, [
-            'domain.required'   => $influencer ? 'Social media URL must be valid URL.'
-                                    : 'The website field must be valid URL.',
-            'domain.unique'     => 'This domain has already been taken.',
+            'domain.required'   => $influencer ? 'Social media URL must be valid URL.' : 'The website field must be valid URL.',
         ]);
         if ($validator->fails()) {
             return back()->withErrors($validator)->withInput();
         }
+        $claim = $request['claim'];
+        $contact = Contact::where('domain', $domain)->first();
+        $error = '';
+        if ($contact) {
+            if ($claim) {
+                if ($contact['type'] != 'Creator' || $contact['owner_type'] != Admin::class) {
+                    $error = 'This domain has already been taken.';
+                }
+            } else {
+                $error = 'This domain has already been taken.';
+                if ($contact['type'] == 'Creator' && $contact['owner_type'] == Admin::class) {
+                    $error = 'We found your domain: <a href="javascript:void(0)" id="claim-profile" class="font-weight-bold">Claim your profile</a>';
+                }
+            }
+        }
+        if ($error) {
+            $validator->errors()->add('domain', $error);
+            return back()->withErrors($validator)->withInput();
+        }
         $user = User::create([
-            'name'      => $request['website_name'],
+            'name'      => $claim ? $contact['name'] : $request['website_name'],
             'email'     => $request['email'],
             'password'  => bcrypt($request['password']),
             'type'      => 'Creator',
@@ -200,16 +213,23 @@ class AuthController extends Controller
         $user->info()->create([
             'referral_code_id' => $referral['id'] ?? null,
         ]);
-        $user->contact()->create([
-            'type'      => $user['type'],
-            'name'      => $user['name'],
-            'email'     => $user['email'],
-            'website'   => $website,
-            'domain'    => $domain,
-            'offers'    => !empty($request['offers']),
-            'posts'     => !empty($request['posts']),
-            'active'    => !empty($request['active']),
-        ]);
+        if ($claim) {
+            $contact['owner_id'] = $user['id'];
+            $contact['owner_type'] = User::class;
+            $contact['email'] = $user['email'];
+            $contact->save();
+        } else {
+            $user->contact()->create([
+                'type'      => $user['type'],
+                'name'      => $user['name'],
+                'email'     => $user['email'],
+                'website'   => $website,
+                'domain'    => $domain,
+                'offers'    => !empty($request['offers']),
+                'posts'     => !empty($request['posts']),
+                'active'    => !empty($request['active']),
+            ]);
+        }
         try {
             $setting = Setting::getSetting(['site_name', 'site_logo', 'contact_email']);
             $data = [
@@ -223,7 +243,7 @@ class AuthController extends Controller
             //logger($exception->getMessage());
         }
         if (auth()->attempt($request->only(['email', 'password']))) {
-            return redirect()->route('brands');
+            return redirect()->route('dashboard');
         }
         return redirect()->route('login')->with('error_message', 'Credentials does not match.');
     }

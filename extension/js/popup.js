@@ -55,9 +55,11 @@ $(() => {
         AddFavorite()
     })
 
+    /*
     $(document).on('click', '#copy-affiliate-link', () => {
         copyAffiliateLink()
     })
+    */
 
     $(document).on('click', '#send-partnership-inquiry', () => {
         if (opportunity) GotoPage('opportunities')
@@ -427,6 +429,7 @@ const AddFavorite = () => {
     })
 }
 
+/*
 const copyAffiliateLink = () => {
     if (contact && contact.affiliate_link) {
         $('#copy-affiliate-link').html('<i class="fa fa-check"></i>').attr('disabled', 'disabled')
@@ -463,6 +466,7 @@ function fallbackCopyTextToClipboard(text) {
     document.body.removeChild(textArea)
     return copied
 }
+*/
 
 const SendPartnershipInquiry = () => {
     if (!access_token) return GotoPage('auth')

@@ -703,7 +703,6 @@ body.dashboard #main-wrapper {
     position: fixed;
     left: 0;
     top: 0;
-    width: 50px;
     height: 100%;
     background-color: #fff;
     padding: 0;
@@ -746,13 +745,13 @@ body.dashboard #main-wrapper {
     background: #f5f5f5;
 }
 
-.sidebar-left ul li:hover a {
-    background: #f5f5f5;
+.sidebar-left ul li a {
+    background: #fff;
     color: #323232;
     width: 200px;
 }
 
-.sidebar-left ul li:hover a span {
+.sidebar-left ul li a span {
     display: block;
 }
 
@@ -779,7 +778,7 @@ body.dashboard #main-wrapper {
 }
 
 #main-container {
-    padding: 20px 40px 20px 90px;
+    padding: 20px 40px 20px 240px;
 }
 
 @media (max-width: 575px) {
@@ -844,4 +843,89 @@ body.dashboard #main-wrapper {
     .dashboard .dataTables_paginate .pagination .paginate_button:not(.first):not(.previous):not(.next):not(.last) {
         display: none;
     }
+}
+
+.btn-round {
+    border-radius: 10rem;
+}
+
+.fs-16 {
+    font-size: 1rem;
+}
+
+.banner-title {
+    color: #ff5851;
+    font-weight: revert;
+    text-align: center;
+}
+
+.banner-link {
+    display: block;
+    font-size: 1rem;
+    color: #000;
+    font-weight: bold;
+    text-decoration: underline;
+    margin-bottom: .5rem;
+}
+
+.banner-link:hover {
+    color: #000;
+}
+
+.partnership-marketer p {
+    font-size: 1.25rem;
+    margin-bottom: 1rem;
+    line-height: 1.5;
+}
+
+@media (min-width: 576px) {
+    .banner-title {
+        font-size: 3rem;
+    }
+
+    .banner-link {
+        font-size: 1.25rem;
+    }
+}
+
+@media (min-width: 768px) {
+    .banner-title {
+        text-align: left;
+    }
+
+    .banner-link {
+        display: flex;
+        font-size: 1.25rem;
+    }
+
+    .partnership-marketer p {
+        font-size: 1.25rem;
+        margin-bottom: 1rem;
+    }
+}
+
+@media (min-width: 992px) {
+    .banner-title {
+        font-size: 4rem;
+    }
+}
+
+@media (min-width: 1200px) {
+    .partnership-marketer p {
+        font-size: 1.5rem;
+        margin-bottom: 2rem;
+    }
+}
+
+.text-underline {
+    text-decoration: underline;
+}
+
+.blog p {
+    font-size: 1rem;
+    line-height: 1.5;
+}
+
+.pagination-center .pagination {
+    justify-content: center;
 }

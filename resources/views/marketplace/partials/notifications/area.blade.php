@@ -32,12 +32,13 @@
         $(function() {
             $(document).on('click', '.not-seen', function() {
                 if (!$('#notifications-list li.noti').length) return
-                const that = $(this), ref = that.data('ref'), noti = $('.noti-number')
+                const that = $(this), ref = that.data('ref'), type = that.data('type'), noti = $('.noti-number')
                 $.ajax({
                     url: '{{ route('partnership-seen') }}',
                     method: 'POST',
                     data: {
                         ref: ref,
+                        type: type,
                     },
                     success(data) {
                         if (ref == 'all') {

@@ -112,12 +112,12 @@
                             <p>Flag Records</p>
                         </a>
                     </li>
-                    <li class="nav-item">
+                    {{--<li class="nav-item">
                         <a href="{{ route('admin.commissions.index') }}" class="nav-link @if ($menu == 'Commissions') active @endif">
                             <i class="nav-icon fas fa-dollar-sign"></i>
                             <p>Commissions</p>
                         </a>
-                    </li>
+                    </li>--}}
                     <li class="nav-item">
                         <a href="{{ route('admin.opportunities.index') }}" class="nav-link @if ($menu == 'Opportunities') active @endif">
                             <i class="nav-icon fas fa-dollar-sign"></i>
@@ -146,6 +146,24 @@
                         <a href="{{ route('admin.ads.index') }}" class="nav-link @if ($menu == 'ADS') active @endif">
                             <i class="nav-icon fas fa-ad"></i>
                             <p>ADS</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{ route('admin.recommendations.index') }}" class="nav-link @if ($menu == 'Recommendations') active @endif">
+                            <i class="nav-icon fas fa-fire"></i>
+                            <p>Recommendations</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{ route('admin.resource.index') }}" class="nav-link @if ($menu == 'Resources') active @endif">
+                            <i class="nav-icon fas fa-thumbs-up"></i>
+                            <p>Resources</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{ route('admin.blogs.index') }}" class="nav-link @if ($menu == 'Blogs') active @endif">
+                            <i class="nav-icon fas fa-blog"></i>
+                            <p>Blogs</p>
                         </a>
                     </li>
                     <li class="nav-item">

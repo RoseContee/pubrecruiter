@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\Marketplace;
 
 use App\Http\Controllers\Controller;
+use App\Mail\RecommendationPartnership;
 use App\Mail\RequestPayout;
 use App\Models\Metric;
 use App\Models\Opportunity;
+use App\Models\Resource;
 use App\Models\Setting;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
@@ -17,11 +19,24 @@ use Illuminate\Support\Facades\Validator;
 class DashboardController extends Controller
 {
     public function getNoti() {
-        $notis = auth()->user()
-            ->partnerships()
+        $user = auth()->user();
+        $outreaches = $user->partnerships()
             ->notSeen()
             ->orderBy('created_at', 'desc')
             ->get();
+        $recommendations = $user->recommendations()
+            ->notSeen()
+            ->orderBy('created_at', 'desc')
+            ->get();
+        $i = $j = 0;
+        $notis = [];
+        while(!empty($outreaches[$i]) || !empty($recommendations[$j])) {
+            if (!empty($outreaches[$i]) && !empty($recommendations[$j])) {
+                if ($outreaches[$i]['created_at'] >= $recommendations[$j]['created_at']) $notis[] = $outreaches[$i++];
+                else $notis[] = $recommendations[$j++];
+            } else if (!empty($outreaches[$i])) $notis[] = $outreaches[$i++];
+            else $notis[] = $recommendations[$j++];
+        }
         return response()->json([
             'noti' => count($notis),
             'notis' => view('marketplace.partials.notifications.items', [
@@ -32,17 +47,96 @@ class DashboardController extends Controller
 
     public function seen(Request $request) {
         $ref = $request['ref'];
-        auth()->user()->partnerships()
-            ->where(function ($query) use ($ref) {
-                if ($ref != 'all') $query->where('id', $ref);
-            })
-            ->update(['seen' => 1]);
+        $type = $request['type'];
+        $user = auth()->user();
+        if ($ref == 'all') {
+            $user->partnerships()->update(['seen' => true]);
+            $user->recommendations()->update(['seen' => true]);
+        } else if ($type == 'outreach') {
+            $user->partnerships()
+                ->where(function ($query) use ($ref) {
+                    if ($ref != 'all') $query->where('id', $ref);
+                })
+                ->update(['seen' => true]);
+        } else {
+            $user->recommendations()
+                ->where(function ($query) use ($ref) {
+                    if ($ref != 'all') $query->where('id', $ref);
+                })
+                ->update(['seen' => true]);
+        }
         return response()->json([
             'success' => true,
         ]);
     }
 
     public function index() {
+        $user = auth()->user();
+        $recommendation = $user->recommendations()->count();
+        $opportunity = $user->opportunities()->where('expiry', '<', now())->count();
+        $resource = Resource::type($user['type'])->count();
+        $favorite = $user->favorites()
+            ->whereHas('contact', function(Builder $query) use ($user) {
+                $query->where(function($query) use ($user) {
+                    $query->where('owner_id', '<>', $user['id'])
+                        ->orWhere('owner_type', '<>', User::class);
+                })->where('type', $user['type'] == 'Brand' ? 'Creator' : 'Brand');
+            })
+            ->count();
+        return view('marketplace.dashboard.index', [
+            'menu'          => 'Dashboard',
+            'recommendation' => $recommendation,
+            'opportunity'   => $opportunity,
+            'resource'      => $resource,
+            'favorite'      => $favorite,
+        ]);
+    }
+
+    public function recommendation() {
+        $user = auth()->user();
+        $recommendations = $user->recommendations()
+            ->has('recommendation')
+            ->orderBy('created_at', 'desc')
+            ->get();
+        return view('marketplace.dashboard.recommendation', [
+            'menu' => 'Recommendation',
+            'recommendations' => $recommendations,
+        ]);
+    }
+
+    public function recommendationPartnership(Request $request) {
+        $recommendation = auth()->user()
+            ->recommendations()
+            ->has('recommendation')
+            ->where('id', $request['recommendation'])
+            ->first();
+        if (!$recommendation || empty($recommendation['recommendation']['email'])) {
+            return response()->json([
+                'success' => false,
+            ], 404);
+        }
+        try {
+            $email = $recommendation['recommendation']['email'];
+            $setting = Setting::getSetting(['site_name', 'site_logo', 'partnership_email']);
+            $data = [
+                'site_name'     => $setting['site_name'],
+                'site_logo'     => $setting['site_logo'],
+                'from_email'    => $setting['partnership_email'],
+            ];
+            Mail::to($email)->send(new RecommendationPartnership($data));
+        } catch (\Exception $exception) {
+            //logger($exception->getMessage());
+            return response()->json([
+                'success' => false,
+                'message' => 'Sorry! Something went wrong. Please try again.',
+            ]);
+        }
+        return response()->json([
+            'success' => true,
+        ]);
+    }
+
+    public function inbound() {
         $user = auth()->user();
         $partnerships = $user->partnerships()
             ->with(['user'])
@@ -61,7 +155,7 @@ class DashboardController extends Controller
                 }
             }
         }
-        return view('marketplace.dashboard.index', [
+        return view('marketplace.dashboard.partnership', [
             'partnerships'  => $partnerships,
             'menu'          => 'Inbound',
         ]);
@@ -72,8 +166,13 @@ class DashboardController extends Controller
         $outreaches = $user->outreaches()
             ->with(['contact', 'contact.user'])
             ->has('user')
-            ->has('contact')
-            ->has('contact.user')
+            ->where(function ($query) {
+                $query->where('manual', true)
+                    ->orWhere(function ($q) {
+                        $q->has('contact')
+                            ->has('contact.user');
+                    });
+            })
             ->orderBy('seen', 'asc')
             ->orderBy('created_at', 'desc')
             ->get();
@@ -88,7 +187,7 @@ class DashboardController extends Controller
                 }
             }
         }
-        return view('marketplace.dashboard.index', [
+        return view('marketplace.dashboard.partnership', [
             'partnerships'  => $outreaches,
             'menu'          => 'Outbound',
         ]);
@@ -120,10 +219,76 @@ class DashboardController extends Controller
         $outreach['notes'] = $request['notes'];
         $outreach->save();
         return response()->json([
-            'payment_sent' => $outreach['payment_sent'],
-            'io_date' => $outreach['io_date'] ? date('n/j/y', strtotime($outreach['io_date'])) : '',
-            'notes' => $outreach['notes'],
+            'payment_sent'  => $outreach['payment_sent'],
+            'io_date'       => $outreach['io_date'] ? date('n/j/y', strtotime($outreach['io_date'])) : '',
+            'notes'         => $outreach['notes'],
         ]);
+    }
+
+    public function newOutreach() {
+        return view('marketplace.dashboard.edit-outreach', [
+            'menu' => 'Outbound',
+        ]);
+    }
+
+    public function createOutreach(Request $request) {
+        $user = auth()->user();
+        $brand_user = $user['type'] == 'Brand';
+        $rule = [
+            'name' => ['required'],
+            'email' => ['required', 'email'],
+        ];
+        $validator = Validator::make($request->all(), $rule);
+        if ($validator->fails()) {
+            return back()->withErrors($validator)->withInput();
+        }
+        $user->outreaches()->create([
+            'name'          => $request['name'],
+            'email'         => $request['email'],
+            'description'   => $request['description'],
+            'manual'        => true,
+            'seen'          => true,
+        ]);
+        return redirect()->route('outbound')->with('success_message', 'New outreach created!');
+    }
+
+    public function editOutreach($id) {
+        $user = auth()->user();
+        $outreach = $user->outreaches()
+            ->where('id', $id)
+            ->where('manual', true)
+            ->first();
+        if (!$outreach) {
+            return back()->with('error_message', 'Cannot find outreach information.');
+        }
+        return view('marketplace.dashboard.edit-outreach', [
+            'menu'      => 'Outbound',
+            'outreach'  => $outreach,
+        ]);
+    }
+
+    public function updateOutreach(Request $request, $id) {
+        $user = auth()->user();
+        $outreach = $user->outreaches()
+            ->where('id', $id)
+            ->where('manual', true)
+            ->first();
+        if (!$outreach) {
+            return back()->with('error_message', 'Cannot find outreach information.');
+        }
+        $rule = [
+            'name' => ['required'],
+            'email' => ['required', 'email'],
+        ];
+        $validator = Validator::make($request->all(), $rule);
+        if ($validator->fails()) {
+            return back()->withErrors($validator)->withInput();
+        }
+        $outreach['name'] = $request['name'];
+        $outreach['email'] = $request['email'];
+        $outreach['description'] = $request['description'];
+        $outreach->save();
+        return back()->with('success_message', 'Outreach information updated!');
     }
 
     public function requestPayout(Request $request) {
@@ -166,7 +331,7 @@ class DashboardController extends Controller
         return view('marketplace.dashboard.opportunities', [
             'info'          => $user['info'],
             'opportunities' => $user['opportunities'],
-            'commissions'   => $user['commissions'],
+            //'commissions'   => $user['commissions'],
             'menu'          => 'Opportunities',
         ]);
     }
@@ -183,6 +348,7 @@ class DashboardController extends Controller
             'description'   => ['required', 'max:255'],
             'cost_type'     => ['required', 'in:dollar,Contact for Pricing'],
             'amount'        => ['required_if:cost_type,dollar'],
+            'expiry'        => ['required', 'date'],
         ];
         if ($request['amount']) {
             $rule['amount'][] = 'numeric';
@@ -195,6 +361,7 @@ class DashboardController extends Controller
             'description'   => $request['description'],
             'cost_type'     => $request['cost_type'],
             'cost'          => $request['cost_type'] == 'dollar' ? $request['amount'] : null,
+            'expiry'        => $request['expiry'],
         ]);
         return back()->with('success_message', 'Opportunity has been added.');
     }
@@ -212,6 +379,7 @@ class DashboardController extends Controller
             'description'   => ['required', 'max:255'],
             'cost_type'     => ['required', 'in:dollar,Contact for Pricing'],
             'amount'        => ['required_if:cost_type,dollar'],
+            'expiry'        => ['required', 'date'],
         ];
         if ($request['amount']) {
             $rule['amount'][] = 'numeric';
@@ -224,6 +392,7 @@ class DashboardController extends Controller
             'description'   => $request['description'],
             'cost_type'     => $request['cost_type'],
             'cost'          => $request['cost_type'] == 'dollar' ? $request['amount'] : null,
+            'expiry'        => $request['expiry'],
         ]);
         return back()->with('info_message', 'Opportunity has been updated.');
     }
@@ -301,6 +470,17 @@ class DashboardController extends Controller
         auth()->user()->favorites()->where('contact_id', $request['contact'])->delete();
         return response()->json([
             'success' => true,
+        ]);
+    }
+
+    public function resource() {
+        $user = auth()->user();
+        $resources = Resource::type($user['type'])
+            ->orderBy('created_at', 'desc')
+            ->paginate(12);
+        return view('marketplace.dashboard.resources', [
+            'menu' => 'Resource',
+            'resources' => $resources,
         ]);
     }
 

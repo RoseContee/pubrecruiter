@@ -19,6 +19,7 @@ class CreateOpportunitiesTable extends Migration
             $table->string('description');
             $table->enum('cost_type', ['dollar', 'Contact for Pricing'])->default('Contact for Pricing');
             $table->string('cost')->nullable();
+            $table->date('expiry')->nullable();
             $table->timestamps();
         });
     }

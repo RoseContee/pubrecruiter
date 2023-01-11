@@ -3,6 +3,9 @@
 @section('title', 'Opportunities')
 
 @push('style')
+    <!-- Tempusdominus Bootstrap 4 -->
+    <link rel="stylesheet" href="{{ asset('public/assets/vendor/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css') }}">
+
     <style type="text/css">
         .description {
             word-break: break-all;
@@ -13,6 +16,7 @@
 @section('content')
     <!--Main Start-->
     <main id="main-container">
+        {{--
         <div class="card">
             <div class="card-header">
                 <h3 class="card-title">
@@ -58,6 +62,7 @@
                 </table>
             </div>
         </div>
+        --}}
 
         <div class="card">
             <div class="card-header">
@@ -76,7 +81,7 @@
                         </div>
                     </div>
                 @else
-                    <table class="table table-bordered table-striped table-hover">
+                    <table class="table table-bordered table-striped table-hover table-responsive d-block d-md-table">
                         <thead>
                         <tr>
                             <th>Description</th>
@@ -87,7 +92,7 @@
                         <tbody>
                         <tr>
                             <td>{{ $info['media_kit_description'] }}</td>
-                            <td>
+                            <td style="word-break: break-all;">
                                 <a href="{{ $info['media_kit_link'] }}" target="_blank">{{ $info['media_kit_link'] }}</a>
                             </td>
                             <td class="text-center px-1">
@@ -128,6 +133,7 @@
                         <th style="width:20px;">No</th>
                         <th>Description</th>
                         <th>Cost</th>
+                        <th>Expiry</th>
                         <th style="width:60px;">Action</th>
                     </tr>
                     </thead>
@@ -137,6 +143,9 @@
                             <td class="text-center">{{ ++$index }}</td>
                             <td class="description">{{ $opportunity['description'] }}</td>
                             <td class="cost">{{ $opportunity['cost_type'] == 'dollar' ? '$'.$opportunity['cost'] : $opportunity['cost_type'] }}</td>
+                            <td class="expiry" data-expiry="{{ $opportunity['expiry'] }}">
+                                @if ($opportunity['expiry']) {{ date('n/j/y', strtotime($opportunity['expiry'])) }} @endif
+                            </td>
                             <td data-ref="{{ $opportunity['id'] }}">
                                 <a href="javascript:void(0);" class="btn text-info px-1 py-0 edit-opportunity">
                                     <i class="fa fa-edit"></i>
@@ -237,8 +246,8 @@
                         @method('POST')
                         @csrf
                         <div class="form-group">
-                            <label for="description">Description</label>
-                            <input type="text" id="description" name="description" class="form-control @error('description', 'opportunity') is-invalid @enderror"
+                            <label for="opportunity-description">Description</label>
+                            <input type="text" id="opportunity-description" name="description" class="form-control @error('description', 'opportunity') is-invalid @enderror"
                                    value="{{ old('description') }}" required
                                    placeholder="Add description">
                             @error('description', 'opportunity')
@@ -278,6 +287,16 @@
                                 <div class="text-danger small">{{ $message }}</div>
                             @enderror
                         </div>
+                        <div class="form-group">
+                            <label for="expiry">Expiry</label>
+                            <input type="text" id="expiry" name="expiry" class="form-control @error('expiry', 'opportunity') is-invalid @enderror"
+                                   data-target="#timepicker" data-toggle="datetimepicker"
+                                   value="{{ old('expiry') }}" required
+                                   placeholder="Add expiry">
+                            @error('expiry', 'opportunity')
+                                <div class="text-danger small">{{ $message }}</div>
+                            @enderror
+                        </div>
                         <button class="btn btn-main btn-sm btn-block">Submit</button>
                     </form>
                 </div>
@@ -312,6 +331,12 @@
     </div>
     <!-- Delete Opportunity Modal End-->
 
+    <!-- InputMask -->
+    <script src="{{ asset('public/assets/vendor/moment/moment.min.js') }}"></script>
+    <!-- Tempusdominus Bootstrap 4 -->
+    <script src="{{ asset('public/assets/vendor/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js') }}"></script>
+
+
     <script type="text/javascript">
         const add_link = '{{ route('opportunities.store') }}'
         const edit_link = '{{ route('opportunities.update', 'EDIT_ID') }}'
@@ -323,41 +348,45 @@
         const deleteOpportunityModal = $('#deleteOpportunityModal')
 
         $(function() {
-            $('#total-unpaid').text({{ $total_unpaid ?: 0 }})
-
-            $('#commissions').DataTable({
-                "responsive": true,
-                "lengthMenu": [10, 25, 50, 100, 250, 500],
-                "autoWidth": false,
-                "columnDefs": [{
-                    "sortable": false, "targets": [2],
-                }, {
-                    "searchable": false, "targets": [],
-                }],
-                "pagingType": "full_numbers",
-                "language": {
-                    "lengthMenu": "Display _MENU_ commissions per page",
-                    "zeroRecords": "Opportunities not found",
-                    "info": "Showing _START_ to _END_ of _TOTAL_ commissions",
-                    "infoEmpty": "",
-                    "infoFiltered": "(from _MAX_ total)",
-                    "paginate": {
-                        "first": '<i class="fa fa-angle-double-left"></i>',
-                        "previous": '<i class="fa fa-angle-left"></i>',
-                        "next": '<i class="fa fa-angle-right"></i>',
-                        "last": '<i class="fa fa-angle-double-right"></i>'
-                    }
-                }
+            $('#expiry').datetimepicker({
+                format: 'YYYY-MM-DD'
             })
+
+            {{--$('#total-unpaid').text({{ $total_unpaid ?: 0 }})--}}
+
+            {{--$('#commissions').DataTable({--}}
+            {{--    "responsive": true,--}}
+            {{--    "lengthMenu": [10, 25, 50, 100, 250, 500],--}}
+            {{--    "autoWidth": false,--}}
+            {{--    "columnDefs": [{--}}
+            {{--        "sortable": false, "targets": [2],--}}
+            {{--    }, {--}}
+            {{--        "searchable": false, "targets": [],--}}
+            {{--    }],--}}
+            {{--    "pagingType": "full_numbers",--}}
+            {{--    "language": {--}}
+            {{--        "lengthMenu": "Display _MENU_ commissions per page",--}}
+            {{--        "zeroRecords": "Opportunities not found",--}}
+            {{--        "info": "Showing _START_ to _END_ of _TOTAL_ commissions",--}}
+            {{--        "infoEmpty": "",--}}
+            {{--        "infoFiltered": "(from _MAX_ total)",--}}
+            {{--        "paginate": {--}}
+            {{--            "first": '<i class="fa fa-angle-double-left"></i>',--}}
+            {{--            "previous": '<i class="fa fa-angle-left"></i>',--}}
+            {{--            "next": '<i class="fa fa-angle-right"></i>',--}}
+            {{--            "last": '<i class="fa fa-angle-double-right"></i>'--}}
+            {{--        }--}}
+            {{--    }--}}
+            {{--})--}}
 
             $('#opportunities').DataTable({
                 "responsive": true,
                 "lengthMenu": [10, 25, 50, 100, 250, 500],
                 "autoWidth": false,
                 "columnDefs": [{
-                    "sortable": false, "targets": [3],
+                    "sortable": false, "targets": [4],
                 }, {
-                    "searchable": false, "targets": [0, 3],
+                    "searchable": false, "targets": [0, 4],
                 }],
                 "pagingType": "full_numbers",
                 "language": {
@@ -375,25 +404,25 @@
                 }
             })
 
-            $(document).on('click', '#request-payout', function() {
-                let that = $(this)
-                that.attr('disabled', 'disabled').find('span').show()
-                $.ajax({
-                    url: '{{ route('request-payout') }}',
-                    method: 'POST',
-                    success(data) {
-                        if (data.success) {
-                            that.find('span').html('<i class="fa fa-check"></i>')
-                        } else {
-                            alert(data.message)
-                            that.removeAttr('disabled').find('span').html('<i class="fa fa-spinner fa-spin"></i>').hide()
-                        }
-                    },
-                    error(data) {
-                        location.reload()
-                    }
-                })
-            })
+            {{--$(document).on('click', '#request-payout', function() {--}}
+            {{--    let that = $(this)--}}
+            {{--    that.attr('disabled', 'disabled').find('span').show()--}}
+            {{--    $.ajax({--}}
+            {{--        url: '{{ route('request-payout') }}',--}}
+            {{--        method: 'POST',--}}
+            {{--        success(data) {--}}
+            {{--            if (data.success) {--}}
+            {{--                that.find('span').html('<i class="fa fa-check"></i>')--}}
+            {{--            } else {--}}
+            {{--                alert(data.message)--}}
+            {{--                that.removeAttr('disabled').find('span').html('<i class="fa fa-spinner fa-spin"></i>').hide()--}}
+            {{--            }--}}
+            {{--        },--}}
+            {{--        error(data) {--}}
+            {{--            location.reload()--}}
+            {{--        }--}}
+            {{--    })--}}
+            {{--})--}}
 
             $(document).on('click', '#add-opportunity', function() {
                 initForm()
@@ -407,13 +436,13 @@
 
                 const ref = $(this).parent().data('ref')
                 const url = edit_link.replace('EDIT_ID', ref)
-                opportunityModal.find('h2').text('Edit Opportunity')
+                opportunityModal.find('.modal-title').text('Edit Opportunity')
                 opportunityForm.attr('action', url)
                 opportunityForm.find('[name="_method"]').val('PUT')
 
                 const tr = $(this).parents('tr')
                 const description = tr.find('.description').text().trim()
-                $('#description').val(description)
+                $('#opportunity-description').val(description)
                 const cost = tr.find('.cost').text().trim()
                 if (cost.substring(0, 1) === '$') {
                     $('#cost-dollar').prop('checked', true)
@@ -424,6 +453,7 @@
                     $('#dollar').hide()
                     $('#amount').val('').removeAttr('required')
                 }
+                $('#expiry').val(tr.find('.expiry').data('expiry').trim())
                 opportunityModal.modal('show')
             })
 
@@ -453,7 +483,7 @@
             })
 
             @if ($errors->opportunity->any())
-                opportunityModal.find('h2').text('Add Opportunity')
+                opportunityModal.find('.modal-title').text('Add Opportunity')
                 opportunityForm.attr('action', add_link)
                 opportunityModal.modal('show')
             @elseif ($errors->media->any())
@@ -462,7 +492,7 @@
         })
 
         function initForm() {
-            opportunityModal.find('h2').text('Add Opportunity')
+            opportunityModal.find('.modal-title').text('Add Opportunity')
             opportunityForm.attr('action', '')
             opportunityForm.find('[name="_method"]').val('POST')
             opportunityForm.find('.is-invalid').removeClass('is-invalid').next().remove()

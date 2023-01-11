@@ -217,7 +217,7 @@ class ContactsController extends Controller
             if (empty($exclusive_deal)) $exclusive_deal = null;
             do {
                 $code = Str::random(8);
-            } while (Network::where('code', $code)->exists());
+            } while (Contact::where('code', $code)->exists());
         } else {
             $offers = !empty($request['offers']);
             $posts = !empty($request['posts']);

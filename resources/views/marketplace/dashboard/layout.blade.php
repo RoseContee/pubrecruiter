@@ -14,6 +14,12 @@
         $contact_type = $type == 'Brand' ? 'creators' : 'brands';
     @endphp
     <ul class="navbar-nav align-items-center justify-content-end ml-auto">
+        <li class="nav-item d-none d-sm-block">
+            <a href="{{ route($contact_type) }}" class="btn btn-main ml-3">
+                Marketplace
+            </a>
+        </li>
+
         @include('marketplace.partials.notifications.area')
 
         <li class="nav-item dropdown">
@@ -26,7 +32,13 @@
                         <a href="{{ route($contact_type) }}">{{ ucfirst(trim($contact_type, 's')) }} Marketplace</a>
                     </li>
                     <li>
-                        <a href="{{ route('dashboard') }}">Incoming Requests</a>
+                        <a href="{{ route('dashboard') }}">Dashboard</a>
+                    </li>
+                    <li>
+                        <a href="{{ route('recommendation') }}">Recommendations</a>
+                    </li>
+                    <li>
+                        <a href="{{ route('inbound') }}">Incoming Requests</a>
                     </li>
                     <li>
                         <a href="{{ route('outbound') }}">Sent Requests</a>
@@ -38,6 +50,9 @@
                     @endif
                     <li>
                         <a href="{{ route('favorites') }}">Favorite {{ ucfirst($contact_type) }}</a>
+                    </li>
+                    <li>
+                        <a href="{{ route('resource') }}">Resources</a>
                     </li>
                     <li>
                         <a href="{{ route('setting') }}">Account Setting</a>
@@ -55,8 +70,20 @@
     <!--Sidebar Start-->
     <aside class="sidebar-left">
         <ul class="main-menu">
-            <li @class(['active' => $menu == 'Inbound'])>
+            <li @class(['active' => $menu == 'Dashboard'])>
                 <a href="{{ route('dashboard') }}">
+                    <i class="fa fa-home text-dark"></i>
+                    <span>Dashboard</span>
+                </a>
+            </li>
+            <li @class(['active' => $menu == 'Recommendation'])>
+                <a href="{{ route('recommendation') }}">
+                    <i class="fa fa-fire text-dark"></i>
+                    <span>Recommendations</span>
+                </a>
+            </li>
+            <li @class(['active' => $menu == 'Inbound'])>
+                <a href="{{ route('inbound') }}">
                     <div>
                         <img src="{{ asset('public/assets/images/icons/incoming.png') }}" alt="incoming">
                     </div>
@@ -83,6 +110,12 @@
                 <a href="{{ route('favorites') }}">
                     <i class="far fa-heart text-dark"></i>
                     <span>Favorite {{ ucfirst($contact_type) }}</span>
+                </a>
+            </li>
+            <li @class(['active' => $menu == 'Resource'])>
+                <a href="{{ route('resource') }}">
+                    <i class="far fa-thumbs-up text-dark"></i>
+                    <span>Resources</span>
                 </a>
             </li>
             <li @class(['active' => $menu == 'Setting'])>

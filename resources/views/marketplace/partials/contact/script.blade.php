@@ -33,7 +33,7 @@
                 })
             })
 
-            @if (auth()->user()->type == 'Creator')
+            {{--@if (auth()->user()->type == 'Creator')
                 $(document).on('click', '.copy-affiliate-link', function() {
                     const that = $(this)
                     that.html('<i class="fa fa-check"></i>').attr('disabled', 'disabled')
@@ -42,7 +42,7 @@
                         that.html('Copy Affiliate Link <i class="fa fa-copy"></i>').removeAttr('disabled')
 					}, 1000)
                 })
-            @endif
+            @endif--}}
 
             $(document).on('click', '.request-partnership:not(:disabled)', function() {
                 const that = $(this)
@@ -56,7 +56,7 @@
                     success(data) {
                         if (data.success) {
                             that.html('<i class="fa fa-check"></i>').removeClass('request-partnership')
-                            @if (auth()->user()->type == 'Creator')
+                            {{--@if (auth()->user()->type == 'Creator')
                                 $.ajax({
                                     url: '{{ route('network-signup') }}',
                                     method: 'POST',
@@ -65,7 +65,7 @@
                                     }
                                 })
                                 window.open(that.data('href'))
-                            @endif
+                            @endif--}}
                         } else {
                             that.html('Request Partnership').removeAttr('disabled')
                             alert(data.message)
@@ -76,6 +76,18 @@
                     }
                 })
             })
+
+            {{--@if (auth()->user()->type == 'Creator')
+                $(document).on('click', '.network-signup', function() {
+                    $.ajax({
+                        url: '{{ route('network-signup') }}',
+                        method: 'POST',
+                        data: {
+                            contact: $(this).data('ref'),
+                        }
+                    })
+                })
+            @endif--}}
         })
     </script>
 @else

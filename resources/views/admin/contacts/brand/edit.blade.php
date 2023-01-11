@@ -136,7 +136,7 @@
                                         <div class="custom-file @error('logo') is-invalid @enderror">
                                             <input type="file" id="logo" name="logo"
                                                    class="custom-file-input" accept="image/*">
-                                            <label class="custom-file-label" for="image">Choose file</label>
+                                            <label class="custom-file-label" for="logo">Choose file</label>
                                         </div>
                                     </div>
                                     @error('logo')
