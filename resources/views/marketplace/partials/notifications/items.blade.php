@@ -7,7 +7,7 @@
            data-ref="{{ $noti['id'] }}"
            data-type="{{ $type }}">
             @if ($type == 'recommendation')
-                <b>{{ $noti['recommendation']['name']??'Someone' }}</b> is recommended!
+                <b>{{ $noti['contact']['name']??'Someone' }}</b> is recommended!
             @elseif ($noti['opportunities'])
                 <b>{{ $noti['user']['name']??'Someone' }}</b> is interested in one of your opportunities!
             @else

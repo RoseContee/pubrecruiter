@@ -48,7 +48,7 @@
                                     <tr>
                                         <td>{{ ++$index }}</td>
                                         <td>{{ $recommendation['user']['name'] ?? '' }}</td>
-                                        <td>{{ $recommendation['recommendation']['name'] ?? '' }}</td>
+                                        <td>{{ $recommendation['contact']['name'] ?? '' }}</td>
                                         <td>{{ $recommendation['note'] }}</td>
                                         <td>
                                             @switch($recommendation['response_time'])

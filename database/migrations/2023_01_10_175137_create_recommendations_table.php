@@ -16,7 +16,7 @@ class CreateRecommendationsTable extends Migration
         Schema::create('recommendations', function (Blueprint $table) {
             $table->id();
             $table->bigInteger('user_id');
-            $table->bigInteger('recommendation_user_id');
+            $table->bigInteger('contact_id');
             $table->string('email');
             $table->tinyInteger('response_time');
             $table->string('note')->nullable();

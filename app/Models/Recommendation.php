@@ -10,7 +10,7 @@ class Recommendation extends Model
     use HasFactory;
 
     protected $fillable = [
-        'user_id', 'recommendation_user_id', 'email', 'response_time', 'note', 'seen',
+        'user_id', 'contact_id', 'email', 'response_time', 'note', 'seen',
     ];
 
     public function scopeNotSeen($query) {
@@ -21,7 +21,7 @@ class Recommendation extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function recommendation() {
-        return $this->belongsTo(User::class, 'recommendation_user_id', 'id');
+    public function contact() {
+        return $this->belongsTo(Contact::class);
     }
 }

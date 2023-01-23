@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Contact;
 use App\Models\Recommendation;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -35,8 +36,10 @@ class RecommendationsController extends Controller
     public function create()
     {
         $users = User::orderBy('name')->get();
+        $contacts = Contact::orderBy('name')->get();
         return view('admin.recommendations.edit', [
-            'users' => $users,
+            'users'    => $users,
+            'contacts' => $contacts,
         ]);
     }
 
@@ -46,33 +49,33 @@ class RecommendationsController extends Controller
     public function store(Request $request)
     {
         $rule = [
-            'user' => ['required', 'exists:users,id'],
-            'recommendation' => ['required', 'exists:users,id'],
-            'email' => ['required', 'email'],
-            'response_time' => ['required', 'in:1,2,3,4'],
+            'user'           => ['required', 'exists:users,id'],
+            'recommendation' => ['required', 'exists:contacts,id'],
+            'email'          => ['required', 'email'],
+            'response_time'  => ['required', 'in:1,2,3,4'],
         ];
         $validator = Validator::make($request->all(), $rule);
         if ($validator->fails()) {
             return back()->withErrors($validator)->withInput()->with('error_message', 'Make sure all validation rules.');
         }
         $selected_user = User::find($user = $request['user']);
-        $selected_recommend = User::find($recommend = $request['recommendation']);
+        $selected_recommend = Contact::find($recommend = $request['recommendation']);
         if ($selected_user['type'] == $selected_recommend['type']) {
             $validator->errors()->add('recommendation', 'The recommendation should not be same with the user.');
             return back()->withErrors($validator)->withInput()->with('error_message', 'Make sure all validation rules.');
         }
         if (Recommendation::where('user_id', $user)
-            ->where('recommendation_user_id', $recommend)
+            ->where('contact_id', $recommend)
             ->exists()
         ) {
             $validator->errors()->add('recommendation', 'The same recommendation already attached to the user.');
             return back()->withErrors($validator)->withInput()->with('error_message', 'Make sure all validation rules.');
         }
-        $recommendation = new Recommendation();
-        $recommendation['user_id'] = $user;
-        $recommendation['recommendation_user_id'] = $recommend;
-        $recommendation['email'] = $request['email'];
-        $recommendation['note'] = $request['note'];
+        $recommendation                  = new Recommendation();
+        $recommendation['user_id']       = $user;
+        $recommendation['contact_id']    = $recommend;
+        $recommendation['email']         = $request['email'];
+        $recommendation['note']          = $request['note'];
         $recommendation['response_time'] = $request['response_time'];
         $recommendation->save();
         return redirect()->route('admin.recommendations.index')->with('success_message', 'New recommendation created!');
@@ -96,9 +99,11 @@ class RecommendationsController extends Controller
             return back()->with('error_message', 'Cannot find recommendation information.');
         }
         $users = User::orderBy('name')->get();
+        $contacts = Contact::orderBy('name')->get();
         return view('admin.recommendations.edit', [
             'recommendation' => $recommendation,
-            'users' => $users,
+            'users'          => $users,
+            'contacts'       => $contacts,
         ]);
     }
 
@@ -112,15 +117,15 @@ class RecommendationsController extends Controller
             return back()->with('error_message', 'Cannot find recommendation information.');
         }
         $rule = [
-            'email' => ['required', 'email'],
+            'email'         => ['required', 'email'],
             'response_time' => ['required', 'in:1,2,3,4'],
         ];
         $validator = Validator::make($request->all(), $rule);
         if ($validator->fails()) {
             return back()->withErrors($validator)->withInput()->with('error_message', 'Make sure all validation rules.');
         }
-        $recommendation['email'] = $request['email'];
-        $recommendation['note'] = $request['note'];
+        $recommendation['email']         = $request['email'];
+        $recommendation['note']          = $request['note'];
         $recommendation['response_time'] = $request['response_time'];
         $recommendation->save();
         return back()->with('success_message', 'Recommendation updated!');

@@ -69,15 +69,15 @@
                                     <label for="recommendation">Recommendation</label>
                                     <select id="recommendation" name="recommendation" class="form-control @error('recommendation') is-invalid @enderror"
                                             @if ($add) required @else readonly @endif>
-                                        @foreach ($users as $user)
+                                        @foreach ($contacts as $contact)
                                             @if ($add)
-                                                <option value="{{ $user['id'] }}" data-email="{{ $user['email'] }}" data-type="{{ $user['type'] }}"
-                                                        @if (old('recommendation') == $user['id']) selected @endif>
-                                                    {{ $user['name'] }}
+                                                <option value="{{ $contact['id'] }}" data-email="{{ $contact['email'] }}" data-type="{{ $contact['type'] }}"
+                                                        @if (old('recommendation') == $contact['id']) selected @endif>
+                                                    {{ $contact['name'] }}
                                                 </option>
-                                            @elseif ($recommendation['recommendation_user_id'] == $user['id'])
-                                                <option value="{{ $user['id'] }}">
-                                                    {{ $user['name'] }}
+                                            @elseif ($recommendation['contact_id'] == $contact['id'])
+                                                <option value="{{ $contact['id'] }}">
+                                                    {{ $contact['name'] }}
                                                 </option>
                                             @endif
                                         @endforeach
