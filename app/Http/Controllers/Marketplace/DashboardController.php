@@ -95,7 +95,7 @@ class DashboardController extends Controller
     public function recommendation() {
         $user = auth()->user();
         $recommendations = $user->recommendations()
-            ->has('recommendation')
+            ->has('contact')
             ->orderBy('created_at', 'desc')
             ->get();
         return view('marketplace.dashboard.recommendation', [
@@ -107,16 +107,16 @@ class DashboardController extends Controller
     public function recommendationPartnership(Request $request) {
         $recommendation = auth()->user()
             ->recommendations()
-            ->has('recommendation')
+            ->has('contact')
             ->where('id', $request['recommendation'])
             ->first();
-        if (!$recommendation || empty($recommendation['recommendation']['email'])) {
+        if (!$recommendation || empty($recommendation['contact']['email'])) {
             return response()->json([
                 'success' => false,
             ], 404);
         }
         try {
-            $email = $recommendation['recommendation']['email'];
+            $email = $recommendation['contact']['email'];
             $setting = Setting::getSetting(['site_name', 'site_logo', 'partnership_email']);
             $data = [
                 'site_name'     => $setting['site_name'],

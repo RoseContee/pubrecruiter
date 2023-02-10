@@ -33,8 +33,8 @@
                     @foreach ($recommendations as $index => $recommendation)
                         <tr>
                             <td class="text-center">{{ ++$index }}</td>
-                            <td>{{ $recommendation['recommendation']['name'] ?? '' }}</td>
-                            <td>{{ $recommendation['recommendation']['email'] ?? '' }}</td>
+                            <td>{{ $recommendation['contact']['name'] ?? '' }}</td>
+                            <td>{{ $recommendation['contact']['email'] ?? '' }}</td>
                             <td>
                                 @switch($recommendation['response_time'])
                                     @case(1) 1 Hour @break

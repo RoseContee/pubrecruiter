@@ -15,11 +15,7 @@
                         <span class="text-white">&copy;{{ date('Y') }} {{ $setting['site_name'] }} - All Rights Reserved</span>
                     </li>
                     <li class="pl-2 mt-2 text-white">
-                        <a href="https://pubrecruiter.com/blog" class="text-white ml-0 ml-lg-4 mr-2">Blog</a>
-                        |
-                        <a href="mailto:support@pubrecruiter.com" class="text-white ml-0 ml-lg-4 mr-2">Support</a>
-                        |
-                        <a href="https://book.pubrecruiter.com/policies" class="text-white ml-2">Policy</a>
+						<b><a href="https://pubrecruiter.com/blog" class="text-white">Blog</a> |<a href="mailto:support@pubrecruiter.com" class="text-white"> Support</a> |<a href="https://book.pubrecruiter.com/policies" class="text-white"> Policy</a></b>
                     </li>
                 </ul>
             </div>

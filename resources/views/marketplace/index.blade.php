@@ -5,7 +5,7 @@
 @section('header-menu')
     <ul class="navbar-nav align-items-center justify-content-around ml-auto">
         <li class="nav-item">
-            <a href="{{ route('create-profile') }}" class="btn font-weight-bold mr-3">
+            <a href="https://pubrecruiter.com/create-profile" class="btn font-weight-bold mr-3">
                 Join
             </a>
         </li>
@@ -53,15 +53,15 @@
                 <div class="col-md-6 col-lg-8 d-flex align-items-center">
                     <div class="text-dark">
                         <h2 class="mb-3 mb-md-5">Built For Partnership Marketers</h2>
-                        <p>There is one main function in driving a partnership's overall success:
-                            <b>Growth 📈</b></p>
-                        <p>We aim to solve the largest problems regarding this key function:</p>
+                        <p>There are two important functions in driving an Affiliate Program's overall success:
+                            <b>Optimization and Growth</b></p>
+                        <p>We aim to solve the largest problems in the space:</p>
                         <ul>
                             <li>
-                                <p>Creators have no centralized place to <b>find</b> or manage applicable partnerships</p>
+                                <p>Creators have no centralized place to find or manage applicable partnerships</p>
                             </li>
                             <li>
-                                <p>Brand managers experience <b>limited bandwidth</b> to recruit new partnerships</p>
+                                <p>Brand managers experience limited bandwidth to recruit new partnerships</p>
                             </li>
                         </ul>
                     </div>
@@ -75,7 +75,7 @@
         <div class="container text-center py-5">
             <div class="row">
                 <div class="col-12 mb-5">
-                    <h1>💯 Focused on Growth</h1>
+                    <h1>Organize and Track Partnerships</h1>
                 </div>
                 <div class="col-md-4">
                     <div class="px-3">
@@ -98,8 +98,8 @@
                         <img src="{{ asset('public/assets/images/home/5.png') }}" alt="image" class="w-100">
                     </div>
                     <h5 class="mt-3">EXPERT SUPPORT</h5>
-                    <p class="text-dark">We're not just software, we're real people. Want to know more about a partner
-                        brand, or even new Affiliate technology?  We got you!</p>
+                    <p class="text-dark">We're not just software, we're real people. Want to know more about a partner,
+                        brand, or even new Affiliate technology, we're here for you.</p>
                 </div>
                 <div class="col-12 mt-4">
                     <a href="{{ route('create-profile') }}" class="banner-link justify-content-center">Sign Up</a>
@@ -113,20 +113,21 @@
                     <div class="col-md-6 col-lg-7 d-flex align-items-center">
                         <div>
                             <h1 class="mb-4">Pricing</h1>
-                            <p class="mb-0">Here's what we charge:</p>
+                            <p class="mb-0">Things that we don't like:</p>
                             <ul>
-                                <li><p class="mb-0"><b>Brands</b>: Contact Us</p></li>
-                                <li><p class="mb-0"><b>Creators</b>: Free</p></li>
-                                <li><p class="mb-0"><i>Large Publishers, Agencies, Other</i>: Contact Us</p></li>
+                                <li><p class="mb-0">Monthly fees</p></li>
+                                <li><p class="mb-0">Contractual obligations</p></li>
+                                <li><p class="mb-0">Squid ink pasta</p></li>
                             </ul>
-                            <p>What You Get:</p>
+                            <p>Things we like:</p>
                             <ul>
-                                <li><p>Solutions including our Chrome Extension, Marketplace, and Dashboard</p></li>
+                                <li><p>Being rewarded when things work properly</p></li>
                             </ul>
-                            <p>Our Guarantee:</p>
-                            <p> When you use Pub Recruiter we want to help bridge a successful partnerships,
-                                grow your business, meet new connections, or even keep your job safe.
-
+                            <p>Introducing Bounty Tips:</p>
+                            <p><b>Bounty Tip (noun):</b> when you see Pub Recruiter to help bridge a successful partnership,
+                                grow your business, meet new connections, or keep your job safe,
+                                we recommend providing a monetary tip.
+                                We make this easy within your dashboard, just sayin'</p>
                         </div>
                     </div>
                     <div class="col-md-6 col-lg-5 d-flex align-items-center">
