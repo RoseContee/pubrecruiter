@@ -38,6 +38,8 @@
                                     <th>Title</th>
                                     <th>Image</th>
                                     <th>Short Content</th>
+                                    <th>Tags</th>
+                                    <th>Comments</th>
                                     <th style="width: 55px;">Action</th>
                                 </tr>
                                 </thead>
@@ -53,6 +55,14 @@
                                             @endif
                                         </td>
                                         <td>{{ $blog['short_content'] }}</td>
+                                        <td>
+                                            @php
+                                                $tags = trim($blog['tags'], ',');
+                                                $tags = implode(', ', preg_split('/\s*,\s*/', $tags, -1, PREG_SPLIT_NO_EMPTY));
+                                            @endphp
+                                            {{ $tags }}
+                                        </td>
+                                        <td>{{ count($blog['comments']) }}</td>
                                         <td class="text-center">
                                             <a href="{{ route('admin.blogs.show', $blog['id']) }}"
                                                     class="text-primary m-1">
@@ -72,6 +82,8 @@
                                     <th>Title</th>
                                     <th>Image</th>
                                     <th>Short Content</th>
+                                    <th>Tags</th>
+                                    <th>Comments</th>
                                     <th>Action</th>
                                 </tr>
                                 </tfoot>
@@ -127,9 +139,9 @@
                 "lengthMenu": [100, 250, 500],
                 "autoWidth": false,
                 "columnDefs": [{
-                    "sortable": false, "targets": [2, 4],
+                    "sortable": false, "targets": [2, 6],
                 }, {
-                    "searchable": false, "targets": [0, 2, 4],
+                    "searchable": false, "targets": [0, 2, 6],
                 }]
             })
 

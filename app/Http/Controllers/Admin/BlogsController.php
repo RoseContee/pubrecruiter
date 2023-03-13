@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Blog;
+use App\Models\BlogComment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\View;
@@ -18,7 +19,9 @@ class BlogsController extends Controller
     }
     public function index()
     {
-        $blogs = Blog::orderBy('created_at', 'desc')->get();
+        $blogs = Blog::with(['comments'])
+            ->orderBy('created_at', 'desc')
+            ->get();
         return view('admin.blogs.index', [
             'blogs' => $blogs,
         ]);
@@ -44,19 +47,25 @@ class BlogsController extends Controller
         $title = $request['title'];
         $slug = preg_replace('/[^a-zA-Z0-9-_]/', '-', $title);
         while (Blog::where('slug', $slug)->exists()) $slug .= '-';
+        $tags = implode(',', preg_split('/\s*,\s*/', $request['tags'], -1, PREG_SPLIT_NO_EMPTY));
         $blog = new Blog();
         $blog['title'] = $title;
         $blog['slug'] = $slug;
         $blog['image'] = 'uploads/'.$request->file('image')->store('blog');;
         $blog['short_content'] = $request['short_content'];
         $blog['content'] = $request['content'];
+        $blog['tags'] = $tags ? ','.$tags.',' : null;
         $blog->save();
         return redirect()->route('admin.blogs.index')->with('success_message', 'Blog added successfully.');
     }
 
     public function show($id)
     {
-        $blog = Blog::find($id);
+        $blog = Blog::with([
+            'comments' => function ($q) {
+                $q->orderBy('created_at', 'desc');
+            }
+        ])->find($id);
         if (!$blog) {
             return back()->with('error_message', 'Cannot find blog information.');
         }
@@ -84,6 +93,7 @@ class BlogsController extends Controller
         $title = $request['title'];
         $slug = preg_replace('/[^a-zA-Z0-9-_]/', '-', $title);
         while (Blog::where('id', '<>', $id)->where('slug', $slug)->exists()) $slug .= '-';
+        $tags = implode(',', preg_split('/\s*,\s*/', $request['tags'], -1, PREG_SPLIT_NO_EMPTY));
         $blog['title'] = $title;
         $blog['slug'] = $slug;
         if ($request->hasFile('image')) {
@@ -94,6 +104,7 @@ class BlogsController extends Controller
         }
         $blog['short_content'] = $request['short_content'];
         $blog['content'] = $request['content'];
+        $blog['tags'] = $tags ? ','.$tags.',' : null;
         $blog->save();
         return redirect()->route('admin.blogs.index')->with('success_message', 'Blog updated successfully.');
     }
@@ -109,5 +120,16 @@ class BlogsController extends Controller
         }
         $blog->delete();
         return back()->with('info_message', 'Blog has been deleted.');
+    }
+
+    public function deleteComment($id, $comment) {
+        $comment = BlogComment::where('blog_id', $id)
+            ->where('id', $comment)
+            ->first();
+        if (!$comment) {
+            return back()->with('error_message', 'Cannot find comment information.');
+        }
+        $comment->delete();
+        return back()->with('info_message', 'Comment has been deleted.');
     }
 }

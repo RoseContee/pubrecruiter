@@ -233,29 +233,29 @@ header nav .logo img {
     max-height: 30px;
 }
 
-header nav form.search-bar {
+form.search-bar {
     position: relative;
     margin-top: 60px;
 }
 
-header nav form.search-bar .form-inline .form-control {
+form.search-bar .form-inline .form-control {
     display: inline-block;
     width: auto;
 }
 
 @media (min-width: 576px) {
-    header nav form.search-bar {
+    form.search-bar {
         margin-top: 0;
     }
 }
 
 @media (min-width: 992px) {
-    header nav form.search-bar {
+    form.search-bar {
         width: 580px;
     }
 }
 
-header nav form.search-bar .filter-options select {
+form.search-bar .filter-options select {
     height: 28px !important;
     color: #fff;
     background: #ff5851;
@@ -926,9 +926,63 @@ body.dashboard #main-wrapper {
     line-height: 1.5;
 }
 
+.blog .small {
+    font-size: 80%;
+}
+
 .blog .blog-item img {
     min-height: 300px;
     max-height: 300px;
+}
+
+.blog .blog-image {
+    width: 520px;
+    height: 320px;
+}
+
+.blog .blog-tagshare {
+    display: block;
+    justify-content: space-between;
+    align-content: center;
+}
+
+@media (min-width: 567px) {
+    .blog .blog-tagshare {
+        display: flex;
+        justify-content: space-between;
+        align-content: center;
+    }
+}
+
+.blog .blog-tagshare .blog-tags {
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.blog .blog-tags a {
+    font-size: 12px;
+    line-height: 28px;
+    margin: 0 2px;
+    padding: 5px 10px;
+    text-align: center;
+    border-radius: 20px;
+    border: 1px solid #ddd;
+    white-space: nowrap;
+    text-transform: capitalize;
+}
+
+.blog .blog-tagshare .blog-share {
+    display: flex;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.blog .blog-tagshare .blog-share a {
+    margin: 0 5px;
+}
+
+.blog .recommendations img {
+    max-width: 100px;
 }
 
 .pagination-center .pagination {

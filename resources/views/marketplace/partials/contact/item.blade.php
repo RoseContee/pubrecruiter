@@ -1,4 +1,4 @@
-<div class="{{ !empty($class) ? $class : 'col-12 col-xs-6 col-sm-6 col-md-4 col-lg-3 pb-4' }}">
+<div class="{{ $class ?? 'col-12 col-xs-6 col-sm-6 col-md-4 col-lg-3 pb-4' }}">
     <div class="contact-item text-center border p-4 h-100">
         @auth
             <a href="javascript:void(0);" class="favorite-brand" data-ref="{{ $contact['id'] }}">

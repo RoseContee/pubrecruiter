@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Marketplace;
 use App\Http\Controllers\Controller;
 use App\Mail\RecommendationPartnership;
 use App\Mail\RequestPayout;
+use App\Models\Contact;
 use App\Models\Metric;
 use App\Models\Opportunity;
 use App\Models\Resource;
@@ -70,7 +71,7 @@ class DashboardController extends Controller
         ]);
     }
 
-    public function index() {
+    public function index(Request $request) {
         $user = auth()->user();
         $recommendation = $user->recommendations()->count();
         $opportunity = $user->opportunities()->where('expiry', '<', now())->count();
@@ -83,12 +84,83 @@ class DashboardController extends Controller
                 })->where('type', $user['type'] == 'Brand' ? 'Creator' : 'Brand');
             })
             ->count();
+        $user_id = $user['id'];
+        $limit = 8;
+        $keyword = $request['q'];
+        $n = $request['n'];
+        $c = strtolower($request['c']);
+        if ($user['type'] == 'Creator') {
+            $contacts = Contact::with(['user'])
+                ->has('user')
+                ->notOwner($user_id)
+                ->brand()
+                ->active()
+                ->where(function ($query) use ($keyword) {
+                    if ($keyword) {
+                        $query->where('name', 'like', "%{$keyword}%")
+                            ->orWhere('tags', 'like', "%{$keyword}%");
+                    }
+                })
+                ->where(function ($query) use ($n) {
+                    if ($n) {
+                        $query->where('network', $n);
+                    }
+                });
+            if (in_array($c, ['asc', 'desc'])) {
+                $contacts = $contacts->orderBy('commission', $c);
+            }
+            $contacts = $contacts->orderBy('featured', 'desc')
+                ->orderBy('created_at', 'desc')
+                ->paginate(12)
+                ->appends([
+                    'q' => $keyword,
+                    'c' => $c,
+                    'n' => $n,
+                ])
+                ->withPath(route('more-contacts'));
+            $networks = Contact::has('user')
+                ->notOwner($user_id)
+                ->brand()
+                ->active()
+                ->orderBy('network')
+                ->groupBy('network')
+                ->pluck('network')
+                ->toArray();
+        } else {
+            $contacts = Contact::with(['user', 'user.opportunities', 'user.info', 'metric'])
+                ->has('user')
+                ->notOwner($user['id'])
+                ->creator()
+                ->active()
+                ->where(function($query) use ($keyword) {
+                    if ($keyword) {
+                        $query->where('name', 'like', "%{$keyword}%")
+                            ->orWhere('tags', 'like', "%{$keyword}%");
+                    }
+                })
+                ->orderBy('featured', 'desc')
+                ->orderBy('created_at', 'desc')
+                ->paginate(12)
+                ->appends([
+                    'q' => $keyword,
+                ])
+                ->withPath(route('more-contacts'));
+        }
+        $favorites = $user->favorites()->pluck('contact_id')->toArray();
+        $sent = $user->outreaches()->pluck('contact_id')->toArray();
         return view('marketplace.dashboard.index', [
             'menu'          => 'Dashboard',
             'recommendation' => $recommendation,
             'opportunity'   => $opportunity,
             'resource'      => $resource,
             'favorite'      => $favorite,
+            'keyword'       => $keyword,
+            'c'             => $c,
+            'n'             => $n,
+            'contacts'      => $contacts,
+            'networks'      => $networks ?? [],
+            'favorites'     => $favorites,
+            'sent'          => $sent,
         ]);
     }
 

@@ -13,6 +13,7 @@
 
 @php
     $brand_user = auth()->user()->type == 'Brand';
+    $contact_type = $brand_user ? 'creators' : 'brands';
 @endphp
 
 @section('content')
@@ -60,6 +61,16 @@
                     </div>
                 </div>
             </div>
+        </div>
+        <div class="bg-white p-2">
+            <div class="mb-5 pb-5">
+                @include('marketplace.partials.search.search-bar', [
+                    'route' => route('dashboard')
+                ])
+            </div>
+            @include('marketplace.partials.search.contacts', [
+                'class' => 'col-12 col-xs-6 col-sm-12 col-md-6 col-lg-4 col-xl-3 pb-4'
+            ])
         </div>
     </main>
     <!--Main End-->

@@ -14,11 +14,13 @@
         $contact_type = $type == 'Brand' ? 'creators' : 'brands';
     @endphp
     <ul class="navbar-nav align-items-center justify-content-end ml-auto">
-        <li class="nav-item d-none d-sm-block">
-            <a href="{{ route($contact_type) }}" class="btn btn-main ml-3">
-                Marketplace
-            </a>
-        </li>
+        @if ($menu != 'Dashboard')
+            <li class="nav-item d-none d-sm-block">
+                <a href="{{ route($contact_type) }}" class="btn btn-main ml-3">
+                    Marketplace
+                </a>
+            </li>
+        @endif
 
         @include('marketplace.partials.notifications.area')
 

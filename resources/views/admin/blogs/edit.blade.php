@@ -107,6 +107,18 @@
                                         </label>
                                     @enderror
                                 </div>
+                                <div class="form-group">
+                                    <label for="tags">Tags</label>
+                                    <input type="text" id="tags" name="tags"
+                                           class="form-control @error('tags') is-invalid @enderror"
+                                           value="{{ trim(old('tags', $blog['tags']??''), ',') }}"
+                                           placeholder="Enter tags">
+                                    @error('tags')
+                                        <label for="tags" class="small text-danger font-weight-normal mb-0">
+                                            {{ $message }}
+                                        </label>
+                                    @enderror
+                                </div>
                             </div>
                             <!-- /.card-body -->
 
@@ -119,10 +131,89 @@
                     </div>
                     <!-- /.card -->
                 </div>
+                <!-- /.col -->
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="card-title">Comments</h5>
+                        </div>
+                        <div class="card-body">
+                            <table id="comments" class="table table-bordered table-hover table-striped">
+                                <thead>
+                                <tr>
+                                    <th style="width: 20px;">No</th>
+                                    <th>Name</th>
+                                    <th>Email</th>
+                                    <th>Comment</th>
+                                    <th>Date</th>
+                                    <th style="width: 55px;">Action</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                @foreach ($blog['comments'] as $index => $comment)
+                                    <tr>
+                                        <td>{{ ++$index }}</td>
+                                        <td>{{ $comment['name'] }}</td>
+                                        <td>{{ $comment['email'] }}</td>
+                                        <td>{{ $comment['comment'] }}</td>
+                                        <td>{{ $comment['created_at'] }}</td>
+                                        <td class="text-center">
+                                            <a href="javascript:void(0);" data-ref="{{ $comment['id'] }}"
+                                               class="text-danger m-1 delete-comment">
+                                                <i class="fas fa-trash"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                @endforeach
+                                </tbody>
+                                <tfoot>
+                                <tr>
+                                    <th>No</th>
+                                    <th>Name</th>
+                                    <th>Email</th>
+                                    <th>Comment</th>
+                                    <th>Date</th>
+                                    <th>Action</th>
+                                </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                        <!-- /.card-body -->
+                    </div>
+                    <!-- /.card -->
+                </div>
+                <!-- /.col -->
             </div>
         </div><!-- /.container-fluid -->
     </section>
     <!-- /.content -->
+
+    <!-- Delete Modal -->
+    <div id="deleteModal" class="modal fade" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form action="" method="POST">
+                    @method('DELETE')
+                    @csrf
+                    <div class="modal-header">
+                        <h4 class="modal-title">Delete Comment</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Are you sure to remove this comment?</p>
+                    </div>
+                    <div class="modal-footer justify-content-between">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
+                        <button type="submit" class="btn btn-danger">Yes</button>
+                    </div>
+                </form>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
 @endsection
 
 @section('script')
@@ -146,6 +237,30 @@
             })
 
             bsCustomFileInput.init()
+
+            let comment = null
+
+            $('#comments').DataTable({
+                "responsive": true,
+                "lengthMenu": [100, 250, 500],
+                "autoWidth": false,
+                "columnDefs": [{
+                    "sortable": false, "targets": [3, 5],
+                }, {
+                    "searchable": false, "targets": [0, 5],
+                }]
+            })
+
+            $(document).on('click', '.delete-comment', function(e) {
+                e.preventDefault()
+                comment = $(this).data('ref')
+                $('#deleteModal').modal('show').find('form').attr('action', '{{ url("admin/blogs/{$blog['id']}/comments") }}/' + comment)
+            })
+
+            $('#deleteModal').on('hidden.bs.modal', function () {
+                comment = null
+                $('#deleteModal form').attr('action', '')
+            })
         })
     </script>
 @endsection

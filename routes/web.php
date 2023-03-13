@@ -14,7 +14,10 @@ Route::group([
     //Homepage Route
     Route::get('/'                              , 'HomeController@index')->name('home')->middleware('noti');
     Route::get('blog'                           , 'BlogController@blog')->name('blog');
+    Route::get('blog/category/{category}'       , 'BlogController@categoryBlog')->name('category-blog');
     Route::get('blog/{slug}'                    , 'BlogController@item')->name('blog-item');
+    Route::get('blog/{slug}/comments'           , 'BlogController@moreComments')->name('more-blog-comments');
+    Route::post('blog/comment/{slug}'           , 'BlogController@blogComment')->name('blog-comment');
 
     Route::group([
         'middleware' => ['auth'],
@@ -164,6 +167,8 @@ Route::group([
                 'as' => 'admin'
             ]);
             Route::post('ads/disable'           , 'AdsController@disableADS')->name('admin.ads.disable');
+
+            Route::delete('blogs/{id}/comments/{comment}' , 'BlogsController@deleteComment')->name('admin.blogs.delete-comments');
 
             Route::get('settings'               , 'HomeController@settings')->name('admin.settings');
             Route::post('settings'              , 'HomeController@updateSettings');
