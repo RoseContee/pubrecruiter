@@ -9,20 +9,38 @@ use Illuminate\Support\Facades\Validator;
 
 class BlogController extends Controller
 {
-    public function blog() {
-        $blogs = Blog::orderBy('created_at', 'desc')
+    public function blog(Request $request) {
+        $keyword = $request['q'];
+        $blogs = Blog::where(function ($q) use ($keyword) {
+                if ($keyword) {
+                    $q->where('title', 'like', '%'.$keyword.'%')
+                        ->orWhere('short_content', 'like', '%'.$keyword.'%')
+                        ->orWhere('content', 'like', '%'.$keyword.'%');
+                }
+            })
+            ->orderBy('created_at', 'desc')
             ->paginate(12);
         return view('marketplace.blog.index', [
+            'keyword' => $keyword,
             'blogs' => $blogs,
         ]);
     }
 
-    public function categoryBlog($category) {
-        $blogs = Blog::where('tags', 'like', '%,'.$category.',%')
+    public function categoryBlog($category, Request $request) {
+        $keyword = $request['q'];
+        $blogs = Blog::where(function ($q) use ($keyword) {
+                if ($keyword) {
+                    $q->where('title', 'like', '%'.$keyword.'%')
+                        ->orWhere('short_content', 'like', '%'.$keyword.'%')
+                        ->orWhere('content', 'like', '%'.$keyword.'%');
+                }
+            })
+            ->where('tags', 'like', '%,'.$category.',%')
             ->orderBy('created_at', 'desc')
             ->paginate(12);
         return view('marketplace.blog.index', [
             'category' => $category,
+            'keyword' => $keyword,
             'blogs' => $blogs,
         ]);
     }

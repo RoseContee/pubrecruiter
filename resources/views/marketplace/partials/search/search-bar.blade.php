@@ -3,7 +3,7 @@
     $c = $c ?? '';
     $n = $n ?? '';
 @endphp
-<form name="searchContact" action="{{ $route }}" class="search-bar" method="GET">
+<form name="searchContact" action="{{ $route }}" class="search-bar {{ !empty($menu) ? 'mx-auto' : '' }}" method="GET">
     <div class="input-group">
         <input type="text" name="q" class="form-control form-control-navbar"
                value="{{ $keyword }}" placeholder="I'm looking for" aria-label="I'm looking for">
