@@ -931,13 +931,13 @@ body.dashboard #main-wrapper {
 }
 
 .blog .blog-item img {
-    min-height: 300px;
-    max-height: 300px;
+    height: 300px;
 }
 
 .blog .blog-image {
-    width: 520px;
-    height: 320px;
+    width: 100%;
+    max-width: 520px;
+    /*height: 320px;*/
 }
 
 .blog .blog-tagshare {

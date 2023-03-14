@@ -19,7 +19,7 @@ class CreateBlogsTable extends Migration
             $table->string('slug')->unique();
             $table->string('image');
             $table->text('short_content');
-            $table->text('content');
+            $table->longText('content');
             $table->timestamps();
         });
     }
