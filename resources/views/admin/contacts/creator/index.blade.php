@@ -66,7 +66,13 @@
                                                 {{ $contact['website'] }}
                                             </a>
                                         </td>
-                                        <td>{{ $contact['tags'] }}</td>
+                                        <td>
+                                            @php
+                                                $tags = trim($contact['tags'], ',');
+                                                $tags = implode(', ', preg_split('/\s*,\s*/', $tags, -1, PREG_SPLIT_NO_EMPTY));
+                                            @endphp
+                                            {{ $tags }}
+                                        </td>
                                         <td class="text-center">
                                             <span class="badge @if ($contact['offers']) badge-info @else invisible @endif">
                                                 Affiliate Offers

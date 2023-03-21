@@ -36,12 +36,6 @@
                                 <td height="24"></td>
                             </tr>
                             <tr>
-                                <td style="color:#000000;font-family:Helvetica,Arial,sans-serif;font-size:16px;font-weight:normal;line-height:1.5">
-                                    They are interested in:<br>
-                                    {{ $data['offers'].($data['offers'] && $data['posts'] ? ' AND' : '').$data['posts'] }}
-                                </td>
-                            </tr>
-                            <tr>
                                 <td height="24"></td>
                             </tr>
                             <tr>
@@ -55,7 +49,7 @@
                             </tr>
                             <tr>
                                 <td style="color:#000000;font-family:Helvetica,Arial,sans-serif;font-size:16px;font-weight:normal;line-height:1.5">
-                                    Reminder: Pub Recruiter helps start partnerships using our marketplace and extension.
+                                    Pub Recruiter helps start partnerships using our marketplace and Chrome extension.  We hope you enjoy our platform and find it useful for your partnership efforts!
                                 </td>
                             </tr>
                             <tr>

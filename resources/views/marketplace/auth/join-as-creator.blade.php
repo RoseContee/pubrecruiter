@@ -14,14 +14,7 @@
                         <h4>Start Your Creator Account</h4>
                     </div>
                     <fieldset>
-                        @if ($message = session('error_message'))
-                            <div class="alert alert-danger alert-dismissible fade show">
-                                <span>{{ $message }}</span>
-                                <a href="javascript:void(0)" class="close" data-dismiss="alert" aria-label="Close">
-                                    <i class="fa fa-close"></i>
-                                </a>
-                            </div>
-                        @endif
+                        @include('marketplace.partials.messages')
                         <div class="form-group claim-profile">
                             <input type="email" id="email" name="email" required
                                    class="form-control @error('email') is-invalid @enderror"

@@ -10,12 +10,13 @@
                 <form action="" class="p-0 p-sm-5"
                       enctype="multipart/form-data" method="POST" onsubmit="submitting()">
                     @csrf
+                    <input type="hidden" name="claim" value="{{ old('claim') }}">
                     <div class="mb-4">
                         <h4>Start Your Brand Account</h4>
                     </div>
                     <fieldset>
                         @include('marketplace.partials.messages')
-                        <div class="form-group">
+                        <div class="form-group claim-profile">
                             <input type="email" id="email" name="email" required
                                    class="form-control @error('email') is-invalid @enderror"
                                    value="{{ old('email') }}" placeholder="Email">
@@ -23,7 +24,7 @@
                                 <label for="email" class="text-danger small">{{ $message }}</label>
                             @enderror
                         </div>
-                        <div class="form-group">
+                        <div class="form-group claim-profile">
                             <input type="password" id="password" name="password" required
                                    class="form-control @error('password') is-invalid @enderror"
                                    placeholder="Password">
@@ -31,7 +32,7 @@
                                 <label for="password" class="text-danger small">{{ $message }}</label>
                             @enderror
                         </div>
-                        <div class="form-group">
+                        <div class="form-group claim-profile">
                             <input type="password" id="password_confirmation" name="password_confirmation" required
                                    class="form-control @error('password_confirmation') is-invalid @enderror"
                                    placeholder="Confirm Password">
@@ -47,13 +48,16 @@
                                 <label for="brand_name" class="text-danger small">{{ $message }}</label>
                             @enderror
                         </div>
+                        @php
+                            $claim = stripos($errors->has('domain'), 'We found your domain') !== false;
+                        @endphp
                         <div class="form-group">
                             <input type="url" id="brand_url" name="brand_url" required
                                    class="form-control @if($errors->has('brand_url') || $errors->has('domain')) is-invalid @endif"
                                    value="{{ old('brand_url') }}" placeholder="Brand URL">
                             @if($errors->has('brand_url') || $errors->has('domain'))
                                 <label for="brand_url" class="text-danger small">
-                                    {{ $errors->has('brand_url') ? $errors->first('brand_url') : $errors->first('domain') }}
+                                    {!! $errors->has('brand_url') ? $errors->first('brand_url') : $errors->first('domain') !!}
                                 </label>
                             @endif
                         </div>
@@ -107,10 +111,10 @@
                             @enderror
                             <label for="logo" class="mt-2">Logo (Preferred Ratio: 2:1)</label>
                         </div>
-                        <div class="form-group">
+                        <div class="form-group claim-profile">
                             <button type="submit" class="btn btn-main btn-block">Start</button>
                         </div>
-                        <div class="form-group text-center">
+                        <div class="form-group text-center claim-profile">
                             <a href="{{ route('login') }}" class="text-info">
                                 Already have an account? <span class="text-danger">Login</span>
                             </a>
@@ -126,6 +130,17 @@
 @push('script')
     <script type="text/javascript">
         $(function() {
+            @if (old('claim') && !$errors->has('brand_name') && !$errors->has('brand_url') && !$errors->has('domain'))
+                $('.form-group:not(.claim-profile)').hide()
+            @else
+                $('[name=claim]').val('')
+            @endif
+
+            $(document).on('click', '#claim-profile', function() {
+                $('.form-group:not(.claim-profile)').hide()
+                $('[name=claim]').val('1')
+            })
+
             $('#network').on('change', function() {
                 toggleOtherNetwork()
             })

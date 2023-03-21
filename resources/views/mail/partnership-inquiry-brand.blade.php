@@ -47,8 +47,7 @@
                             </tr>
                             <tr>
                                 <td style="color:#000000;font-family:Helvetica,Arial,sans-serif;font-size:16px;font-weight:normal;line-height:1.5">
-                                    In case you didn't know, Pub Recruiter helps start partnerships
-                                    using our marketplace and extension (Free to join!).
+                                    Pub Recruiter helps you start partnerships through marketplace and Chrome extension (it's free!).
                                 </td>
                             </tr>
                             <tr>

@@ -121,9 +121,11 @@
                                     <td class="notes">{{ $partnership['notes'] }}</td>
                                     <td>
                                         @if ($manual)
-                                            <a href="{{ route('edit-outreach', $partnership['id']) }}" class="btn text-main p-0">
-                                                <i class="fa fa-edit"></i>
-                                            </a>
+                                            @if ($partnership['manual'])
+                                                <a href="{{ route('edit-outreach', $partnership['id']) }}" class="btn text-main p-0">
+                                                    <i class="fa fa-edit"></i>
+                                                </a>
+                                            @endif
                                         @else
                                             <a href="javascript:void(0);" class="btn text-main p-0 edit-partnership"
                                                data-partnership="{{ $partnership['id'] }}">
@@ -143,9 +145,11 @@
                             @endif
                             @if ($manual)
                                 <td>
-                                    <a href="{{ route('edit-outreach', $partnership['id']) }}" class="btn text-main p-0">
-                                        <i class="fa fa-edit"></i>
-                                    </a>
+                                    @if ($partnership['manual'])
+                                        <a href="{{ route('edit-outreach', $partnership['id']) }}" class="btn text-main p-0">
+                                            <i class="fa fa-edit"></i>
+                                        </a>
+                                    @endif
                                 </td>
                             @endif
                         </tr>

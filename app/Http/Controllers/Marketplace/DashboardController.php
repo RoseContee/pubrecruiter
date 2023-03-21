@@ -85,7 +85,9 @@ class DashboardController extends Controller
             })
             ->count();
         $user_id = $user['id'];
-        $limit = 8;
+        $tags = $user['contact']['tags'] ?? '';
+        $tags = preg_split('/\s*,\s*/', $tags, -1, PREG_SPLIT_NO_EMPTY);
+        $limit = 12;
         $keyword = $request['q'];
         $n = $request['n'];
         $c = strtolower($request['c']);
@@ -101,6 +103,11 @@ class DashboardController extends Controller
                             ->orWhere('tags', 'like', "%{$keyword}%");
                     }
                 })
+                ->where(function ($query) use ($tags) {
+                    foreach ($tags as $tag) {
+                        $query->orWhere('tags', 'like', "%,{$tag},%");
+                    }
+                })
                 ->where(function ($query) use ($n) {
                     if ($n) {
                         $query->where('network', $n);
@@ -111,7 +118,7 @@ class DashboardController extends Controller
             }
             $contacts = $contacts->orderBy('featured', 'desc')
                 ->orderBy('created_at', 'desc')
-                ->paginate(12)
+                ->paginate($limit)
                 ->appends([
                     'q' => $keyword,
                     'c' => $c,
@@ -138,9 +145,14 @@ class DashboardController extends Controller
                             ->orWhere('tags', 'like', "%{$keyword}%");
                     }
                 })
+                ->where(function ($query) use ($tags) {
+                    foreach ($tags as $tag) {
+                        $query->orWhere('tags', 'like', "%,{$tag},%");
+                    }
+                })
                 ->orderBy('featured', 'desc')
                 ->orderBy('created_at', 'desc')
-                ->paginate(12)
+                ->paginate($limit)
                 ->appends([
                     'q' => $keyword,
                 ])

@@ -14,7 +14,13 @@
         $contact_type = $type == 'Brand' ? 'creators' : 'brands';
     @endphp
     <ul class="navbar-nav align-items-center justify-content-end ml-auto">
-        @if ($menu != 'Dashboard')
+        @if ($menu == 'Dashboard')
+            <li class="nav-item d-none d-sm-block">
+                <a href="{{ $setting['extension_link'] }}" class="btn btn-main ml-3" target="_blank">
+                    <i class="fab fa-chrome"></i> Download
+                </a>
+            </li>
+        @else
             <li class="nav-item d-none d-sm-block">
                 <a href="{{ route($contact_type) }}" class="btn btn-main ml-3">
                     Marketplace

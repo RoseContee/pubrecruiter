@@ -28,7 +28,7 @@
                                     </a>
                                     <a href="{{ $resource['url'] }}"
                                        class="btn btn-main btn-sm btn-block text-truncate" target="_blank">
-                                        Exclusive Deal
+                                        Go to
                                     </a>
                                 </div>
                             </div>

@@ -15,6 +15,10 @@
             </span>
         @endif
         <a href="{{ $contact['website'] }}" class="text-dark" target="_blank">
+            @php
+                $tags = trim($contact['tags'], ',');
+                $tags = implode(', ', preg_split('/\s*,\s*/', $tags, -1, PREG_SPLIT_NO_EMPTY));
+            @endphp
             @if ($contact['type'] == 'Brand')
                 <h4 class="mt-3 mb-3">
                     {{ $contact->contact_name() }} <i class="fa fa-external-link-alt"></i>
@@ -24,7 +28,7 @@
                         <img src="{{ asset('public/'.$contact['logo']) }}" alt="Logo">
                     @endif
                 </figure>
-                <h5 class="mb-0">{{ $contact['tags'] }}&nbsp;</h5>
+                <h5 class="mb-0">{{ $tags }}&nbsp;</h5>
                 <p class="small font-weight-bold">
                     @if ($contact['commission'])
                         @php $commission = ltrim(rtrim($contact['commission_type'].$contact['commission'].$contact['commission_type'], '$'), '%'); @endphp
@@ -37,7 +41,7 @@
                 <h4 class="mt-3 @auth mb-2 @endauth">
                     {{ $contact->contact_name() }} <i class="fa fa-external-link-alt"></i>
                 </h4>
-                <h5 @auth class="mb-3" @endauth>{{ $contact['tags'] }}&nbsp;</h5>
+                <h5 @auth class="mb-3" @endauth>{{ $tags }}&nbsp;</h5>
                 <p class="font-weight-bold @if (auth()->check()) mb-2 @else mb-3 @endif">Interested In:</p>
                 <div class="row @if (auth()->check()) mb-1 @else mb-2 @endif">
                     <div class="col-4 text-right small pl-0">

@@ -222,6 +222,7 @@ class ContactsController extends Controller
             $offers = !empty($request['offers']);
             $posts = !empty($request['posts']);
         }
+        $tags = implode(',', preg_split('/\s*,\s*/', $request['tags'], -1, PREG_SPLIT_NO_EMPTY));
         $contact = $contact->create([
             'type'          => ucfirst($type),
             'name'          => $name,
@@ -232,7 +233,7 @@ class ContactsController extends Controller
             'network_id'    => $network_id,
             'network'       => $network,
             'network_link'  => $network_link,
-            'tags'          => $request['tags'],
+            'tags'          => $tags ? ','.$tags.',' : null,
             'commission'      => $commission,
             'commission_type' => $commission_type,
             'commission_unit' => $commission_unit,
@@ -445,6 +446,7 @@ class ContactsController extends Controller
             $offers = !empty($request['offers']);
             $posts = !empty($request['posts']);
         }
+        $tags = implode(',', preg_split('/\s*,\s*/', $request['tags'], -1, PREG_SPLIT_NO_EMPTY));
         $contact->update([
             'owner_id'      => $owner_id,
             'owner_type'    => $owner_type,
@@ -456,7 +458,7 @@ class ContactsController extends Controller
             'network_id'    => $network_id,
             'network'       => $network,
             'network_link'  => $network_link,
-            'tags'          => $request['tags'],
+            'tags'          => $tags ? ','.$tags.',' : null,
             'commission'      => $commission,
             'commission_type' => $commission_type,
             'commission_unit' => $commission_unit,

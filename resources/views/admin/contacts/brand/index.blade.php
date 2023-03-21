@@ -73,7 +73,13 @@
                                                      class="img-fluid" alt="{{ $contact['name'] }}" style="width:120px;">
                                             @endif
                                         </td>
-                                        <td>{{ $contact['tags'] }}</td>
+                                        <td>
+                                            @php
+                                                $tags = trim($contact['tags'], ',');
+                                                $tags = implode(', ', preg_split('/\s*,\s*/', $tags, -1, PREG_SPLIT_NO_EMPTY));
+                                            @endphp
+                                            {{ $tags }}
+                                        </td>
                                         <td>
                                             <a href="{{ $contact['network_link'] }}" target="_blank">
                                                 {{ $contact['network'] }}

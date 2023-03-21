@@ -88,19 +88,38 @@ class AuthController extends Controller
         if ($validator->fails()) {
             return back()->withErrors($validator)->withInput();
         }
-        $domain = $request['domain'] = getDomain($request['brand_url'], $influencer);
+        $website = $request['brand_url'];
+        $domain = $request['domain'] = getDomain($website, $influencer);
         if ($influencer) {
             $validator->errors()->add('domain', 'The brand url field is invalid URL.');
             return back()->withErrors($validator)->withInput();
         }
         $rule = [
-            'domain' => ['required', 'unique:contacts,domain'],
+            'domain' => ['required'],
         ];
         $validator = Validator::make($request->all(), $rule, [
             'domain.required'   => 'The brand url field must be valid URL.',
-            'domain.unique'     => 'This domain has already been taken.',
         ]);
         if ($validator->fails()) {
+            return back()->withErrors($validator)->withInput();
+        }
+        $claim = $request['claim'];
+        $contact = Contact::where('domain', $domain)->first();
+        $error = '';
+        if ($contact) {
+            if ($claim) {
+                if ($contact['type'] != 'Brand' || $contact['owner_type'] != Admin::class) {
+                    $error = 'This domain has already been taken.';
+                }
+            } else {
+                $error = 'This domain has already been taken.';
+                if ($contact['type'] == 'Brand' && $contact['owner_type'] == Admin::class) {
+                    $error = 'We found your domain: <a href="javascript:void(0)" id="claim-profile" class="font-weight-bold">Claim your profile</a>';
+                }
+            }
+        }
+        if ($error) {
+            $validator->errors()->add('domain', $error);
             return back()->withErrors($validator)->withInput();
         }
         $user = User::create([
@@ -114,31 +133,38 @@ class AuthController extends Controller
             'referral_code_id' => $referral['id'] ?? null,
         ]);
 
-        if ($request->hasFile('logo')) {
-            $logo = 'uploads/'.$request->file('logo')->store('brands');
-        }
-        if ($request['network']) {
-            $n = Network::find($request['network']);
-            $network_id = $n['id'];
-            $network = $n['name'];
-            $network_link = $n['link'];
+        if ($claim) {
+            $contact['owner_id'] = $user['id'];
+            $contact['owner_type'] = User::class;
+            $contact['email'] = $user['email'];
+            $contact->save();
         } else {
-            $network_id = null;
-            $network = $request['network_name'];
-            $network_link = $request['network_link'];
+            if ($request->hasFile('logo')) {
+                $logo = 'uploads/'.$request->file('logo')->store('brands');
+            }
+            if ($request['network']) {
+                $n = Network::find($request['network']);
+                $network_id = $n['id'];
+                $network = $n['name'];
+                $network_link = $n['link'];
+            } else {
+                $network_id = null;
+                $network = $request['network_name'];
+                $network_link = $request['network_link'];
+            }
+            $user->contact()->create([
+                'type'          => $user['type'],
+                'name'          => $user['name'],
+                'email'         => $user['email'],
+                'website'       => $website,
+                'domain'        => $domain,
+                'logo'          => $logo ?? null,
+                'network_id'    => $network_id,
+                'network'       => $network,
+                'network_link'  => $network_link,
+                'active'        => 1,
+            ]);
         }
-        $user->contact()->create([
-            'type'          => $user['type'],
-            'name'          => $user['name'],
-            'email'         => $user['email'],
-            'website'       => $request['brand_url'],
-            'domain'        => $domain,
-            'logo'          => $logo ?? null,
-            'network_id'    => $network_id,
-            'network'       => $network,
-            'network_link'  => $network_link,
-            'active'        => 1,
-        ]);
         try {
             $setting = Setting::getSetting(['site_name', 'site_logo', 'contact_email', 'extension_link']);
             $data = [
