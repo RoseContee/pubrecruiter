@@ -88,6 +88,7 @@ class DashboardController extends Controller
         $tags = $user['contact']['tags'] ?? '';
         $tags = preg_split('/\s*,\s*/', $tags, -1, PREG_SPLIT_NO_EMPTY);
         $limit = 12;
+        $all = $request['all'];
         $keyword = $request['q'];
         $n = $request['n'];
         $c = strtolower($request['c']);
@@ -103,9 +104,11 @@ class DashboardController extends Controller
                             ->orWhere('tags', 'like', "%{$keyword}%");
                     }
                 })
-                ->where(function ($query) use ($tags) {
-                    foreach ($tags as $tag) {
-                        $query->orWhere('tags', 'like', "%,{$tag},%");
+                ->where(function ($query) use ($tags, $keyword, $all) {
+                    if (!$keyword && !$all) {
+                        foreach ($tags as $tag) {
+                            $query->orWhere('tags', 'like', "%,{$tag},%");
+                        }
                     }
                 })
                 ->where(function ($query) use ($n) {
@@ -145,9 +148,11 @@ class DashboardController extends Controller
                             ->orWhere('tags', 'like', "%{$keyword}%");
                     }
                 })
-                ->where(function ($query) use ($tags) {
-                    foreach ($tags as $tag) {
-                        $query->orWhere('tags', 'like', "%,{$tag},%");
+                ->where(function ($query) use ($tags, $keyword, $all) {
+                    if (!$keyword && !$all) {
+                        foreach ($tags as $tag) {
+                            $query->orWhere('tags', 'like', "%,{$tag},%");
+                        }
                     }
                 })
                 ->orderBy('featured', 'desc')

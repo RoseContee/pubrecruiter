@@ -20,7 +20,12 @@
     <!--Main Start-->
     <main id="main-container">
         <div class="bg-white p-2">
-            <div class="mb-5 pb-5">
+            <div class="dashboard mb-5 pb-5">
+                <p class="">
+                    <a href="{{ route('dashboard', ['all' => 'true']) }}" class="btn btn-main">
+                        See All
+                    </a>
+                </p>
                 @include('marketplace.partials.search.search-bar', [
                     'route' => route('dashboard')
                 ])

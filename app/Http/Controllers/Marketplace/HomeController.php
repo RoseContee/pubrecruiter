@@ -97,9 +97,11 @@ class HomeController extends Controller
                         ->orWhere('tags', 'like', "%{$keyword}%");
                 }
             })
-            ->where(function ($query) use ($tags) {
-                foreach ($tags as $tag) {
-                    $query->orWhere('tags', 'like', "%,{$tag},%");
+            ->where(function ($query) use ($tags, $keyword) {
+                if (!$keyword) {
+                    foreach ($tags as $tag) {
+                        $query->orWhere('tags', 'like', "%,{$tag},%");
+                    }
                 }
             })
             ->where(function ($query) use ($n) {
@@ -160,9 +162,11 @@ class HomeController extends Controller
                         ->orWhere('tags', 'like', "%{$keyword}%");
                 }
             })
-            ->where(function ($query) use ($tags) {
-                foreach ($tags as $tag) {
-                    $query->orWhere('tags', 'like', "%,{$tag},%");
+            ->where(function ($query) use ($tags, $keyword) {
+                if (!$keyword) {
+                    foreach ($tags as $tag) {
+                        $query->orWhere('tags', 'like', "%,{$tag},%");
+                    }
                 }
             })
             ->orderBy('featured', 'desc')
@@ -199,9 +203,11 @@ class HomeController extends Controller
                         ->orWhere('tags', 'like', "%{$keyword}%");
                 }
             })
-            ->where(function ($query) use ($tags) {
-                foreach ($tags as $tag) {
-                    $query->orWhere('tags', 'like', "%,{$tag},%");
+            ->where(function ($query) use ($tags, $keyword) {
+                if (!$keyword) {
+                    foreach ($tags as $tag) {
+                        $query->orWhere('tags', 'like', "%,{$tag},%");
+                    }
                 }
             });
         $query = [

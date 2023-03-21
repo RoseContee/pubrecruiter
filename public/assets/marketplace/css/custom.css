@@ -238,6 +238,10 @@ form.search-bar {
     margin-top: 60px;
 }
 
+#main-container form.search-bar {
+    margin-top: 0;
+}
+
 form.search-bar .form-inline .form-control {
     display: inline-block;
     width: auto;
