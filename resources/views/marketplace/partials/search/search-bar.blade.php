@@ -20,9 +20,14 @@
             @endif
         </div>
     </div>
-    @if (!$brand_user)
-        <div class="d-block d-sm-flex filter-options position-absolute mt-1">
-            <div class="form-inline align-items-center mb-1 mb-sm-0">
+    <div class="d-block d-md-flex filter-options position-absolute mt-1">
+        <div class="form-inline align-items-center mb-1 mb-md-0">
+            <a href="{{ "{$route}?all=true" }}" class="btn btn-main">
+                See All
+            </a>
+        </div>
+        @if (!$brand_user)
+            <div class="form-inline align-items-center ml-0 ml-md-3 mb-1 mb-md-0">
                 <input type="hidden" name="c" value="{{ $c }}">
                 <label for="commission-sort" class="mr-3 mr-sm-2 mb-0">Sort By:</label>
                 <a href="javascript:void(0);" id="commission-sort" class="btn btn-main btn-sm">
@@ -36,7 +41,7 @@
                     @endif
                 </a>
             </div>
-            <div class="form-inline align-items-center ml-0 ml-sm-3">
+            <div class="form-inline align-items-center ml-0 ml-md-3">
                 <label for="network-filter" class="mr-2 mb-0">Filter By:</label>
                 <select id="network-filter" name="n" class="form-control">
                     <option value="">Select Network</option>
@@ -47,8 +52,8 @@
                     @endforeach
                 </select>
             </div>
-        </div>
-    @endif
+        @endif
+    </div>
 </form>
 
 

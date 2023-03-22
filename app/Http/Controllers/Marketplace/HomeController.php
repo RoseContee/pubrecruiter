@@ -82,6 +82,7 @@ class HomeController extends Controller
         $user_id = $user['id'];
         $tags = $user['contact']['tags'] ?? '';
         $tags = preg_split('/\s*,\s*/', $tags, -1, PREG_SPLIT_NO_EMPTY);
+        $all = $request['all'];
         $keyword = $request['q'];
         $n = $request['n'];
         $c = strtolower($request['c']);
@@ -97,8 +98,8 @@ class HomeController extends Controller
                         ->orWhere('tags', 'like', "%{$keyword}%");
                 }
             })
-            ->where(function ($query) use ($tags, $keyword) {
-                if (!$keyword) {
+            ->where(function ($query) use ($tags, $keyword, $all) {
+                if (!$keyword && !$all) {
                     foreach ($tags as $tag) {
                         $query->orWhere('tags', 'like', "%,{$tag},%");
                     }
@@ -149,6 +150,7 @@ class HomeController extends Controller
         }
         $tags = $user['contact']['tags'] ?? '';
         $tags = preg_split('/\s*,\s*/', $tags, -1, PREG_SPLIT_NO_EMPTY);
+        $all = $request['all'];
         $keyword = $request['q'];
         $limit = 12;
         $contacts = Contact::with(['user', 'user.opportunities', 'user.info', 'metric'])
@@ -162,8 +164,8 @@ class HomeController extends Controller
                         ->orWhere('tags', 'like', "%{$keyword}%");
                 }
             })
-            ->where(function ($query) use ($tags, $keyword) {
-                if (!$keyword) {
+            ->where(function ($query) use ($tags, $keyword, $all) {
+                if (!$keyword && !$all) {
                     foreach ($tags as $tag) {
                         $query->orWhere('tags', 'like', "%,{$tag},%");
                     }

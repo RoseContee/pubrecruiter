@@ -1,4 +1,4 @@
-<div id="contacts-list" class="row">
+<div id="contacts-list" class="row @if (!empty($menu)) pt-3 pt-md-0 @endif">
     @forelse ($contacts as $contact)
         @include('marketplace.partials.contact.item', [
             'class' => $class ?? null
