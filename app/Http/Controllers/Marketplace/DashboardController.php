@@ -123,9 +123,10 @@ class DashboardController extends Controller
                 ->orderBy('created_at', 'desc')
                 ->paginate($limit)
                 ->appends([
-                    'q' => $keyword,
-                    'c' => $c,
-                    'n' => $n,
+                    'q'   => $keyword,
+                    'c'   => $c,
+                    'n'   => $n,
+                    'all' => $all,
                 ])
                 ->withPath(route('more-contacts'));
             $networks = Contact::has('user')
@@ -159,7 +160,8 @@ class DashboardController extends Controller
                 ->orderBy('created_at', 'desc')
                 ->paginate($limit)
                 ->appends([
-                    'q' => $keyword,
+                    'q'   => $keyword,
+                    'all' => $all,
                 ])
                 ->withPath(route('more-contacts'));
         }

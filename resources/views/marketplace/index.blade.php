@@ -85,12 +85,12 @@
                 <div class="row pb-md-4 pb-lg-0">
                     <div class="col-md-6 col-lg-7 d-flex align-items-center">
                         <div>
-                            <h2 class="mb-4">Award Winning Content</h2>
-                            <p class="mb-0">10+ Years in Affiliate and Partnership Marketing</p>
+                            <h2 class="mb-4">Learn More...</h2>
+                            <p class="mb-0">Get to know our platform and more!</p>
                             <ul><br>
-                                <li><p class="mb-0">Start Building Your Affiliate Business</p></li>
-                                <li><p class="mb-0">Content and Website Partnership Concepts</p></li>
-                                <li><p class="mb-0">Brand and Program Optimization Ideas</p></li>
+                                <li><p class="mb-0">How To Use Pub Recruiter</p></li>
+                                <li><p class="mb-0">Affiliate Marketing News and Trends</p></li>
+                                <li><p class="mb-0"><a href="https://calendly.com/pubrecruiter/30min">Meet us!</a></p></li>
                             </ul>
                             
                         </div>

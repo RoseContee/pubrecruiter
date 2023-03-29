@@ -117,9 +117,10 @@ class HomeController extends Controller
             ->orderBy('created_at', 'desc')
             ->paginate($limit)
             ->appends([
-                'q' => $keyword,
-                'c' => $c,
-                'n' => $n,
+                'q'   => $keyword,
+                'c'   => $c,
+                'n'   => $n,
+                'all' => $all,
             ])
             ->withPath(route('more-contacts'));
         $favorites = $user->favorites()->pluck('contact_id')->toArray();
@@ -175,7 +176,8 @@ class HomeController extends Controller
             ->orderBy('created_at', 'desc')
             ->paginate($limit)
             ->appends([
-                'q' => $keyword,
+                'q'   => $keyword,
+                'all' => $all,
             ])
             ->withPath(route('more-contacts'));
         $favorites = $user->favorites()->pluck('contact_id')->toArray();
@@ -192,6 +194,7 @@ class HomeController extends Controller
         $user = auth()->user();
         $tags = $user['contact']['tags'] ?? '';
         $tags = preg_split('/\s*,\s*/', $tags, -1, PREG_SPLIT_NO_EMPTY);
+        $all = $request['all'];
         $keyword = $request['q'];
         $limit = 12;
         $contacts = Contact::with(['user'])
@@ -205,15 +208,16 @@ class HomeController extends Controller
                         ->orWhere('tags', 'like', "%{$keyword}%");
                 }
             })
-            ->where(function ($query) use ($tags, $keyword) {
-                if (!$keyword) {
+            ->where(function ($query) use ($tags, $keyword, $all) {
+                if (!$keyword && !$all) {
                     foreach ($tags as $tag) {
                         $query->orWhere('tags', 'like', "%,{$tag},%");
                     }
                 }
             });
         $query = [
-            'q' => $keyword,
+            'q'   => $keyword,
+            'all' => $all,
         ];
         if ($user['type'] == 'Creator') {
             $query['n'] = $n = $request['n'];
