@@ -25,9 +25,9 @@
                 <div class="col-md-5 d-flex align-items-center mb-3">
                     <div>
                         <h1 class="banner-title mb-0">
-                            Affiliate<br class="d-none d-md-block">
-                            Marketing<br class="d-none d-md-block">
-                            Made Easy
+                            More<br class="d-none d-md-block">
+                            Quality<br class="d-none d-md-block">
+                            Partners
                         </h1>
                         <br>
                         <div class="d-flex d-md-block d-lg-flex justify-content-between">
@@ -39,58 +39,52 @@
                     </div>
                 </div>
                 <div class="col-md-7 mb-3">
-                    <img src="{{ asset('public/assets/images/home/1.png') }}" alt="image" class="w-100">
+                    <img src="{{ asset('public/assets/images/home/1.png') }}" alt="image" class="w-85">
                 </div>
             </div>
         </div>
-
+		
         <div class="container text-center py-5">
             <div class="row">
                 <div class="col-12 mb-5">
-                    <h1>Research and Manage Partnerships</h1>
+                    <h1>💯 Free Affiliate Solution</h1>
                 </div>
-                <div class="col-md-4">
+				<div class="col-md-4">
                     <div class="px-3">
                         <img src="{{ asset('public/assets/images/home/3.png') }}" alt="image" class="w-100">
                     </div>
                     <h5 class="mt-3">Marketplace</h5>
-                    <p class="text-dark">Explore new partnership opportunities and 
-                        reach out to the right contact with just a click of a button. Find out commission rates, network location, and get exclusive deals! </p>
+                    <p class="text-dark">Explore partnership opportunities with just a few clicks using our marketplace</p>
                 </div>
                 <div class="col-md-4">
                     <div class="px-3">
                         <img src="{{ asset('public/assets/images/home/4.png') }}" alt="image" class="w-100">
                     </div>
-                    <h5 class="mt-3">Outreach</h5>
-                    <p class="text-dark">Get notified when a partner wants to work with you, add your own notes,
-                        you can even add your own Affiliate Partnership outreaches within your dashboard.</p>
+                    <h5 class="mt-3">Innovative</h5>
+                    <p class="text-dark">Use our Patent Pending Chrome Extension to find a new opportunity or useful information</p>
                 </div>
                 <div class="col-md-4">
                     <div class="px-3">
                         <img src="{{ asset('public/assets/images/home/5.png') }}" alt="image" class="w-100">
                     </div>
-                    <h5 class="mt-3">Support</h5>
-                    <p class="text-dark">Get partner recommendations through our own proprietary process, and let us know directly if you want to know more about a partner using our Chrome Extension!</p>
+                    <h5 class="mt-3">We're Your Rock</h5>
+                    <p class="text-dark">We know what it's like to always have the need to provide incremental performance.  Let us be your extra resource!  </p>
                 </div>
-                <div class="col-12 mt-4">
-                    <a href="{{ route('create-profile') }}" class="banner-link justify-content-center">Sign Up</a>
-                </div>
+                
             </div>
         </div>
-
-		<center><img src="{{ asset('public/assets/images/home/usedby.png') }}"></center>
 
         <div class="container text-dark py-5">
             <div class="pb-md-5 pb-lg-0">
                 <div class="row pb-md-4 pb-lg-0">
                     <div class="col-md-6 col-lg-7 d-flex align-items-center">
                         <div>
-                            <h2 class="mb-4">Learn More...</h2>
-                            <p class="mb-0">Get to know our platform and more!</p>
+                            <h2 class="mb-4">Have questions? Book a call!</h2>
+                            <p class="mb-0">We can answer these...</p>
                             <ul><br>
-                                <li><p class="mb-0">How To Use Pub Recruiter</p></li>
-                                <li><p class="mb-0">Affiliate Marketing News and Trends</p></li>
-                                <li><p class="mb-0"><a href="https://calendly.com/pubrecruiter/30min">Meet us!</a></p></li>
+                                <li><p class="mb-0">How do we earn?</p></li>
+                                <li><p class="mb-0">How our software works</p></li>
+                                <li><p class="mb-0"><a href="https://calendly.com/pubrecruiter/30min">Schedule today!</a></p></li>
                             </ul>
                             
                         </div>

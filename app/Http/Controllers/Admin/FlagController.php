@@ -21,7 +21,8 @@ class FlagController extends Controller
      */
     public function index()
     {
-        $records = NoContact::with(['user'])
+        $records = NoContact::query()
+            ->with(['user'])
             ->has('user')
             ->orderBy('domain')
             ->get();
@@ -75,7 +76,7 @@ class FlagController extends Controller
      */
     public function destroy($id)
     {
-        $record = NoContact::find($id);
+        $record = NoContact::query()->find($id);
         if (!$record) {
             return back()->with('error_message', 'Cannot find flag record information.');
         }

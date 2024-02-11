@@ -11,7 +11,7 @@ class BlogController extends Controller
 {
     public function blog(Request $request) {
         $keyword = $request['q'];
-        $blogs = Blog::where(function ($q) use ($keyword) {
+        $blogs = Blog::query()->where(function ($q) use ($keyword) {
                 if ($keyword) {
                     $q->where('title', 'like', '%'.$keyword.'%')
                         ->orWhere('short_content', 'like', '%'.$keyword.'%')
@@ -28,7 +28,7 @@ class BlogController extends Controller
 
     public function categoryBlog($category, Request $request) {
         $keyword = $request['q'];
-        $blogs = Blog::where(function ($q) use ($keyword) {
+        $blogs = Blog::query()->where(function ($q) use ($keyword) {
                 if ($keyword) {
                     $q->where('title', 'like', '%'.$keyword.'%')
                         ->orWhere('short_content', 'like', '%'.$keyword.'%')
@@ -46,7 +46,7 @@ class BlogController extends Controller
     }
 
     public function item($slug) {
-        $blog = Blog::where('slug', $slug)->first();
+        $blog = Blog::query()->where('slug', $slug)->first();
         if (!$blog) abort(404);
         $tags = preg_split('/\s*,\s*/', trim($blog['tags']), -1, PREG_SPLIT_NO_EMPTY);
         $recommendations = Blog::where(function($q) use ($tags) {
@@ -82,7 +82,7 @@ class BlogController extends Controller
     }
 
     public function moreComments($slug) {
-        $blog = Blog::where('slug', $slug)->first();
+        $blog = Blog::query()->where('slug', $slug)->first();
         if (!$blog) return response()->json([], 404);
         $comments = $blog->comments()
             ->orderBy('created_at', 'desc')
@@ -110,7 +110,7 @@ class BlogController extends Controller
         if ($validator->fails()) {
             return back()->withErrors($validator)->withInput();
         }
-        $blog = Blog::where('slug', $slug)->first();
+        $blog = Blog::query()->where('slug', $slug)->first();
         if (!$blog) abort(404);
         $blog->comments()->create([
             'name' => $request['name'],

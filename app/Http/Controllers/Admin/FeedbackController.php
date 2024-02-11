@@ -23,7 +23,9 @@ class FeedbackController extends Controller
      */
     public function index()
     {
-        $feedbacks = Feedback::orderBy('created_at', 'desc')->get();
+        $feedbacks = Feedback::query()
+            ->orderBy('created_at', 'desc')
+            ->get();
         return view('admin.feedback.index', [
             'feedbacks' => $feedbacks,
         ]);
@@ -54,7 +56,7 @@ class FeedbackController extends Controller
      */
     public function show($id)
     {
-        $feedback = Feedback::with('user')->find($id);
+        $feedback = Feedback::query()->with(['user'])->find($id);
         if (!$feedback) {
             return back()->with('error_message', 'Cannot find feedback information.');
         }
@@ -83,7 +85,7 @@ class FeedbackController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $feedback = Feedback::find($id);
+        $feedback = Feedback::query()->find($id);
         if (!$feedback) {
             return back()->with('error_message', 'Cannot find feedback information.');
         }
@@ -97,7 +99,7 @@ class FeedbackController extends Controller
         $response_time = in_array($request['response_time'], [1, 2, 3, 4]) ? $request['response_time'] : null;
         $feedback['response_time'] = $response_time;
         $feedback['comment'] = $request['comment'];
-        $feedback['user_id'] = User::find($request['user'])->first()->id;
+        $feedback['user_id'] = $request['user'];
         $feedback->save();
         return back()->with('info_message', 'Successfully updated');
     }
@@ -109,7 +111,7 @@ class FeedbackController extends Controller
      */
     public function destroy($id)
     {
-        $feedback = Feedback::find($id);
+        $feedback = Feedback::query()->find($id);
         if (!$feedback) {
             return back()->with('error_message', 'Cannot find feedback information.');
         }

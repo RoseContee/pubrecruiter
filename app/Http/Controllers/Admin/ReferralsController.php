@@ -23,7 +23,7 @@ class ReferralsController extends Controller
      */
     public function index()
     {
-        $referrals = ReferralCode::get();
+        $referrals = ReferralCode::query()->get();
         return view('admin.referrals.index', [
             'referrals' => $referrals,
         ]);
@@ -60,7 +60,7 @@ class ReferralsController extends Controller
      */
     public function show($id)
     {
-        $referral = ReferralCode::find($id);
+        $referral = ReferralCode::query()->find($id);
         if (!$referral) {
             return back()->with('error_message', 'Cannot find referral code information.');
         }
@@ -82,7 +82,7 @@ class ReferralsController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $referral = ReferralCode::find($id);
+        $referral = ReferralCode::query()->find($id);
         if (!$referral) {
             return back()->with('error_message', 'Cannot find referral code information.');
         }
@@ -103,7 +103,7 @@ class ReferralsController extends Controller
      */
     public function destroy($id)
     {
-        $referral = ReferralCode::find($id);
+        $referral = ReferralCode::query()->find($id);
         if (!$referral) {
             return back()->with('error_message', 'Cannot find referral information.');
         }

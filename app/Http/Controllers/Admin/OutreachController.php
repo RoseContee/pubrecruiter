@@ -22,7 +22,8 @@ class OutreachController extends Controller
      */
     public function index()
     {
-        $outreaches = Outreach::with(['user', 'user.info.referral', 'contact', 'contact.user'])
+        $outreaches = Outreach::query()
+            ->with(['user', 'user.info.referral', 'contact', 'contact.user'])
             ->has('user')
             ->has('contact')
             ->has('contact.user')
@@ -30,7 +31,8 @@ class OutreachController extends Controller
             ->get();
         foreach ($outreaches as $outreach) {
             if ($outreach['opportunities']) {
-                $outreach['opportunities'] = Opportunity::whereIn('id', explode(',', $outreach['opportunities']))
+                $outreach['opportunities'] = Opportunity::query()
+                    ->whereIn('id', explode(',', $outreach['opportunities']))
                     ->where('user_id', $outreach['owner_id'])
                     ->get();
             }
@@ -85,7 +87,7 @@ class OutreachController extends Controller
      */
     public function destroy($id)
     {
-        $outreach = Outreach::find($id);
+        $outreach = Outreach::query()->find($id);
         if (!$outreach) {
             return back()->with('error_message', 'Cannot find outreach information.');
         }

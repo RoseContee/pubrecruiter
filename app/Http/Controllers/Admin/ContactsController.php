@@ -35,7 +35,8 @@ class ContactsController extends Controller
         if (!in_array($type, ['brand', 'creator'])) {
             return redirect()->route('admin.contacts.index', ['type' => 'brand']);
         }
-        $contacts = Contact::with(['feedbacks'])
+        $contacts = Contact::query()
+            ->with(['feedbacks'])
             ->where(function ($query) use ($type) {
                 if ($type == 'brand') $query->where('type', 'Brand');
                 else $query->where('type', 'Creator');
@@ -70,8 +71,9 @@ class ContactsController extends Controller
         if (!in_array($type, ['brand', 'creator'])) {
             return back();
         }
-        $networks = Network::get();
-        $users = User::doesntHave('contact')
+        $networks = Network::query()->get();
+        $users = User::query()
+            ->doesntHave('contact')
             ->where(function ($query) use ($type) {
                 if ($type == 'brand') $query->where('type', 'Brand');
                 else $query->where('type', 'Creator');
@@ -85,7 +87,7 @@ class ContactsController extends Controller
         ];
         $metrics = $user_metrics = [];
         if ($type == 'creator') {
-            $metrics = Metric::get();
+            $metrics = Metric::query()->get();
         }
         return view("admin.contacts.{$type}.edit", [
             'submenu'   => $type,
@@ -135,7 +137,7 @@ class ContactsController extends Controller
             }
         } else {
             $rule['website'] = ['required', 'url'];
-            $metrics = Metric::get();
+            $metrics = Metric::query()->get();
             foreach ($metrics as $metric) {
                 if ($request['metric'.$metric['id']]) {
                     $rule['metric'.$metric['id']] = ['metric:'.strtolower($metric['type'])];
@@ -175,7 +177,8 @@ class ContactsController extends Controller
         $exclusive_deal =
         $code = null;
         if ($owner) {
-            $user = User::doesntHave('contact')
+            $user = User::query()
+                ->doesntHave('contact')
                 ->where('id', $owner)
                 ->where(function ($query) use ($brand) {
                     if ($brand) $query->where('type', 'Brand');
@@ -217,7 +220,7 @@ class ContactsController extends Controller
             if (empty($exclusive_deal)) $exclusive_deal = null;
             do {
                 $code = Str::random(8);
-            } while (Contact::where('code', $code)->exists());
+            } while (Contact::query()->where('code', $code)->exists());
         } else {
             $offers = !empty($request['offers']);
             $posts = !empty($request['posts']);
@@ -271,7 +274,7 @@ class ContactsController extends Controller
         }
         $type = strtolower($contact['type']);
         $networks = Network::get();
-        $users = User::whereDoesntHave('contact', function (Builder $query) use ($contact) {
+        $users = User::query()->whereDoesntHave('contact', function (Builder $query) use ($contact) {
                 $query->where('id', '<>', $contact['id']);
             })
             ->where(function ($query) use ($type) {
@@ -287,7 +290,7 @@ class ContactsController extends Controller
         ];
         $metrics = $user_metrics = [];
         if ($type == 'creator') {
-            $metrics = Metric::get();
+            $metrics = Metric::query()->get();
             $user_metrics = $contact->metrics()
                 ->pluck('value', 'metric_id');
         }
@@ -315,7 +318,7 @@ class ContactsController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $contact = Contact::find($id);
+        $contact = Contact::query()->find($id);
         if (!$contact) {
             return back()->with('error_message', 'Cannot find contact information.');
         }
@@ -397,7 +400,8 @@ class ContactsController extends Controller
         $exclusive_deal     = $contact['exclusive_deal'];
         if ($update_owner) {
             if ($owner) {
-                $user = User::doesntHave('contact')
+                $user = User::query()
+                    ->doesntHave('contact')
                     ->where('id', $owner)
                     ->where(function ($query) use ($brand) {
                         if ($brand) $query->where('type', 'Brand');
@@ -490,7 +494,7 @@ class ContactsController extends Controller
      */
     public function destroy($id)
     {
-        $contact = Contact::find($id);
+        $contact = Contact::query()->find($id);
         if (!$contact) {
             return back()->with('error_message', 'Cannot find contact information.');
         }
@@ -498,6 +502,7 @@ class ContactsController extends Controller
         $contact->favorites()->delete();
         $contact->outreaches()->delete();
         $contact->subrecords()->delete();
+        $contact->recommendations()->delete();
         if ($contact['logo'] && file_exists(public_path($contact['logo']))) {
             unlink(public_path($contact['logo']));
         }

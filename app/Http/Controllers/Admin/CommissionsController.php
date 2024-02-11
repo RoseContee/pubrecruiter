@@ -22,7 +22,8 @@ class CommissionsController extends Controller
      */
     public function index()
     {
-        $commissions = Commission::with('user')
+        $commissions = Commission::query()
+            ->with(['user'])
             ->orderBy('user_id')
             ->get();
         return view('admin.commissions.index', [
@@ -81,7 +82,7 @@ class CommissionsController extends Controller
      */
     public function show($id)
     {
-        $commission = Commission::find($id);
+        $commission = Commission::query()->find($id);
         if (!$commission) {
             return back()->with('error_message', 'Cannot find commission information.');
         }
@@ -105,7 +106,7 @@ class CommissionsController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $commission = Commission::find($id);
+        $commission = Commission::query()->find($id);
         if (!$commission) {
             return back()->with('error_message', 'Cannot find commission information.');
         }
@@ -143,7 +144,7 @@ class CommissionsController extends Controller
      */
     public function destroy($id)
     {
-        $commission = Commission::find($id);
+        $commission = Commission::query()->find($id);
         if (!$commission) {
             return back()->with('error_message', 'Cannot find commission information.');
         }

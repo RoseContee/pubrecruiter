@@ -24,7 +24,9 @@ class RecommendationsController extends Controller
      */
     public function index()
     {
-        $recommendations = Recommendation::orderBy('created_at', 'desc')->get();
+        $recommendations = Recommendation::query()
+            ->with(['user', 'contact'])
+            ->orderBy('created_at', 'desc')->get();
         return view('admin.recommendations.index', [
             'recommendations' => $recommendations,
         ]);
@@ -35,8 +37,8 @@ class RecommendationsController extends Controller
      */
     public function create()
     {
-        $users = User::orderBy('name')->get();
-        $contacts = Contact::orderBy('name')->get();
+        $users = User::query()->orderBy('name')->get();
+        $contacts = Contact::query()->orderBy('name')->get();
         return view('admin.recommendations.edit', [
             'users'    => $users,
             'contacts' => $contacts,
@@ -58,13 +60,14 @@ class RecommendationsController extends Controller
         if ($validator->fails()) {
             return back()->withErrors($validator)->withInput()->with('error_message', 'Make sure all validation rules.');
         }
-        $selected_user = User::find($user = $request['user']);
-        $selected_recommend = Contact::find($recommend = $request['recommendation']);
+        $selected_user = User::query()->find($user = $request['user']);
+        $selected_recommend = Contact::query()->find($recommend = $request['recommendation']);
         if ($selected_user['type'] == $selected_recommend['type']) {
             $validator->errors()->add('recommendation', 'The recommendation should not be same with the user.');
             return back()->withErrors($validator)->withInput()->with('error_message', 'Make sure all validation rules.');
         }
-        if (Recommendation::where('user_id', $user)
+        if (Recommendation::query()
+            ->where('user_id', $user)
             ->where('contact_id', $recommend)
             ->exists()
         ) {
@@ -94,12 +97,12 @@ class RecommendationsController extends Controller
      */
     public function edit($id)
     {
-        $recommendation = Recommendation::find($id);
+        $recommendation = Recommendation::query()->find($id);
         if (!$recommendation) {
             return back()->with('error_message', 'Cannot find recommendation information.');
         }
-        $users = User::orderBy('name')->get();
-        $contacts = Contact::orderBy('name')->get();
+        $users = User::query()->orderBy('name')->get();
+        $contacts = Contact::query()->orderBy('name')->get();
         return view('admin.recommendations.edit', [
             'recommendation' => $recommendation,
             'users'          => $users,
@@ -112,7 +115,7 @@ class RecommendationsController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $recommendation = Recommendation::find($id);
+        $recommendation = Recommendation::query()->find($id);
         if (!$recommendation) {
             return back()->with('error_message', 'Cannot find recommendation information.');
         }
@@ -136,7 +139,7 @@ class RecommendationsController extends Controller
      */
     public function destroy($id)
     {
-        $recommendation = Recommendation::find($id);
+        $recommendation = Recommendation::query()->find($id);
         if (!$recommendation) {
             return back()->with('error_message', 'Cannot find recommendation information.');
         }

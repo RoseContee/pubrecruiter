@@ -93,7 +93,8 @@ class DashboardController extends Controller
         $n = $request['n'];
         $c = strtolower($request['c']);
         if ($user['type'] == 'Creator') {
-            $contacts = Contact::with(['user'])
+            $contacts = Contact::query()
+                ->with(['user'])
                 ->has('user')
                 ->notOwner($user_id)
                 ->brand()
@@ -138,7 +139,8 @@ class DashboardController extends Controller
                 ->pluck('network')
                 ->toArray();
         } else {
-            $contacts = Contact::with(['user', 'user.opportunities', 'user.info', 'metric'])
+            $contacts = Contact::query()
+                ->with(['user', 'user.opportunities', 'user.info', 'metric'])
                 ->has('user')
                 ->notOwner($user['id'])
                 ->creator()

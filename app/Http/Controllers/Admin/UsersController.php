@@ -29,7 +29,8 @@ class UsersController extends Controller
      */
     public function index()
     {
-        $users = User::with('info')
+        $users = User::query()
+            ->with(['info'])
             ->where('active', '<>', 2)
             ->get();
         return view('admin.users.index', [
@@ -42,7 +43,7 @@ class UsersController extends Controller
      */
     public function create()
     {
-        $referrals = ReferralCode::orderBy('code')->get();
+        $referrals = ReferralCode::query()->orderBy('code')->get();
         return view('admin.users.edit', [
             'referrals' => $referrals,
         ]);
@@ -98,11 +99,11 @@ class UsersController extends Controller
      */
     public function show($id)
     {
-        $user = User::find($id);
+        $user = User::query()->find($id);
         if (!$user) {
             return back()->with('error_message', 'Cannot find user information.');
         }
-        $referrals = ReferralCode::orderBy('code')->get();
+        $referrals = ReferralCode::query()->orderBy('code')->get();
         return view('admin.users.edit', [
             'user'      => $user,
             'referrals' => $referrals,
@@ -127,7 +128,7 @@ class UsersController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $user = User::find($id);
+        $user = User::query()->find($id);
         if (!$user) {
             return back()->with('error_message', 'Cannot find user information.');
         }
@@ -184,7 +185,7 @@ class UsersController extends Controller
      */
     public function destroy($id)
     {
-        $user = User::with(['contact'])->find($id);
+        $user = User::query()->with(['contact'])->find($id);
         if (!$user) {
             return back()->with('error_message', 'Cannot find user information.');
         }
@@ -206,6 +207,7 @@ class UsersController extends Controller
         $user->opportunities()->delete();
         $user->subrecords()->delete();
         $user->info()->delete();
+        $user->recommendations()->delete();
         $user->delete();
         return back()->with('info_message', 'User has been deleted.');
     }

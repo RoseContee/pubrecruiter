@@ -95,6 +95,10 @@ class Contact extends Model
         return $this->hasMany(SubRecord::class);
     }
 
+    public function recommendations() {
+        return $this->hasMany(Recommendation::class);
+    }
+
     public function contact_name() {
         if ($this->owner_type == User::class) return $this->user->name;
         return $this->name;

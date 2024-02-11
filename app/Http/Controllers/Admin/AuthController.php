@@ -50,7 +50,7 @@ class AuthController extends Controller
         $email = $request['email'];
         $token = Str::random(32);
         $now = now();
-        $password_reset = PasswordReset::firstOrCreate([
+        $password_reset = PasswordReset::query()->firstOrCreate([
             'type' => 'admin',
             'email' => $email,
         ], [
@@ -93,7 +93,9 @@ class AuthController extends Controller
                 'error_message' => 'This reset link is already expired. Please try again.',
             ]);
         }
-        $admin = Admin::where('email', $password_reset['email'])->first();
+        $admin = Admin::query()
+            ->where('email', $password_reset['email'])
+            ->first();
         if (!$admin) {
             $password_reset->delete();
             return view('admin.auth.not-found', [
@@ -113,7 +115,9 @@ class AuthController extends Controller
             $password_reset->save();
             return back()->with('error_message', 'This reset link is already expired. Please try again.');
         }
-        $admin = Admin::where('email', $password_reset['email'])->first();
+        $admin = Admin::query()
+            ->where('email', $password_reset['email'])
+            ->first();
         if (!$admin) {
             $password_reset->delete();
             return back()->with('error_message', 'Your reset request is invalid. Your account does not exist anymore.');

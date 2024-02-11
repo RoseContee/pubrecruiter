@@ -23,7 +23,7 @@ class MetricsController extends Controller
      */
     public function index()
     {
-        $metrics = Metric::get();
+        $metrics = Metric::query()->get();
         return view('admin.metrics.index', [
             'metrics' => $metrics
         ]);
@@ -60,7 +60,7 @@ class MetricsController extends Controller
      */
     public function show($id)
     {
-        $metric = Metric::find($id);
+        $metric = Metric::query()->find($id);
         if (!$metric) {
             return back()->with('error_message', 'Cannot find metric information.');
         }
@@ -82,7 +82,7 @@ class MetricsController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $metric = Metric::find($id);
+        $metric = Metric::query()->find($id);
         if (!$metric) {
             return back()->with('error_message', 'Cannot find metric information.');
         }
@@ -103,7 +103,7 @@ class MetricsController extends Controller
      */
     public function destroy($id)
     {
-        $metric = Metric::find($id);
+        $metric = Metric::query()->find($id);
         if (!$metric) {
             return back()->with('error_message', 'Cannot find metric information.');
         }

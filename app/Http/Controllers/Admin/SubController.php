@@ -16,7 +16,8 @@ class SubController extends Controller
     }
 
     public function index() {
-        $records = SubRecord::with(['user', 'contact', 'contact.user'])
+        $records = SubRecord::query()
+            ->with(['user', 'contact', 'contact.user'])
             ->has('user')
             ->has('contact.user')
             ->get();
@@ -26,7 +27,7 @@ class SubController extends Controller
     }
 
     public function destroy($id) {
-        $record = SubRecord::find($id);
+        $record = SubRecord::query()->find($id);
         if (!$record) {
             return back()->with('error_message', 'Cannot find sub record information.');
         }

@@ -22,7 +22,9 @@ class AdsController extends Controller
      */
     public function index()
     {
-        $ads = ADS::orderBy('active', 'desc')->get();
+        $ads = ADS::query()
+            ->orderBy('active', 'desc')
+            ->get();
         $active = false;
         foreach ($ads as $ad) {
             if ($ad['active']) {
@@ -80,7 +82,7 @@ class AdsController extends Controller
      */
     public function show($id)
     {
-        $ad = ADS::find($id);
+        $ad = ADS::query()->find($id);
         if (!$ad) {
             return back()->with('error_message', 'Cannot find AD information.');
         }
@@ -107,12 +109,12 @@ class AdsController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $ad = ADS::find($id);
+        $ad = ADS::query()->find($id);
         if (!$ad) {
             return back()->with('error_message', 'Cannot find AD information.');
         }
         $rule = [
-            'link'      => ['required', 'url'],
+            'link' => ['required', 'url'],
         ];
         if ($request->hasFile('image')) {
             $rule['image'] = ['image'];
@@ -144,7 +146,7 @@ class AdsController extends Controller
      */
     public function destroy($id)
     {
-        $ad = ADS::find($id);
+        $ad = ADS::query()->find($id);
         if (!$ad) {
             return back()->with('error_message', 'Cannot find AD information.');
         }

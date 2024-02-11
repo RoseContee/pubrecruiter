@@ -23,7 +23,7 @@ class NetworksController extends Controller
      */
     public function index()
     {
-        $networks = Network::get();
+        $networks = Network::query()->get();
         return view('admin.networks.index', [
             'networks' => $networks,
         ]);
@@ -70,7 +70,7 @@ class NetworksController extends Controller
      */
     public function show($id)
     {
-        $network = Network::find($id);
+        $network = Network::query()->find($id);
         if (!$network) {
             return back()->with('error_message', 'Cannot find network information.');
         }
@@ -92,7 +92,7 @@ class NetworksController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $network = Network::find($id);
+        $network = Network::query()->find($id);
         if (!$network) {
             return back()->with('error_message', 'Cannot find network information.');
         }
@@ -123,7 +123,7 @@ class NetworksController extends Controller
      */
     public function destroy($id)
     {
-        $network = Network::find($id);
+        $network = Network::query()->find($id);
         if (!$network) {
             return back()->with('error_message', 'Cannot find network information.');
         }

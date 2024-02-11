@@ -23,7 +23,8 @@ class HomeController extends Controller
         $tags = preg_split('/\s*,\s*/', $tags, -1, PREG_SPLIT_NO_EMPTY);
         $limit = $user ? 8 : 4;
         if (!$user || $user['type'] == 'Creator') {
-            $contacts['brands'] = Contact::with(['user'])
+            $contacts['brands'] = Contact::query()
+                ->with(['user'])
                 ->has('user')
                 ->notOwner($user_id)
                 ->brand()
@@ -47,7 +48,8 @@ class HomeController extends Controller
                 ->toArray();
         }
         if (!$user || $user['type'] == 'Brand') {
-            $contacts['creators'] = Contact::with(['user', 'user.opportunities', 'user.info', 'metric'])
+            $contacts['creators'] = Contact::query()
+                ->with(['user', 'user.opportunities', 'user.info', 'metric'])
                 ->has('user')
                 ->notOwner($user_id)
                 ->creator()
@@ -87,7 +89,8 @@ class HomeController extends Controller
         $n = $request['n'];
         $c = strtolower($request['c']);
         $limit = 12;
-        $contacts = Contact::with(['user'])
+        $contacts = Contact::query()
+            ->with(['user'])
             ->has('user')
             ->notOwner($user_id)
             ->brand()
@@ -125,7 +128,8 @@ class HomeController extends Controller
             ->withPath(route('more-contacts'));
         $favorites = $user->favorites()->pluck('contact_id')->toArray();
         $sent = $user->outreaches()->pluck('contact_id')->toArray();
-        $networks = Contact::has('user')
+        $networks = Contact::query()
+            ->has('user')
             ->notOwner($user_id)
             ->brand()
             ->active()
@@ -154,7 +158,8 @@ class HomeController extends Controller
         $all = $request['all'];
         $keyword = $request['q'];
         $limit = 12;
-        $contacts = Contact::with(['user', 'user.opportunities', 'user.info', 'metric'])
+        $contacts = Contact::query()
+            ->with(['user', 'user.opportunities', 'user.info', 'metric'])
             ->has('user')
             ->notOwner($user['id'])
             ->creator()
@@ -197,7 +202,8 @@ class HomeController extends Controller
         $all = $request['all'];
         $keyword = $request['q'];
         $limit = 12;
-        $contacts = Contact::with(['user'])
+        $contacts = Contact::query()
+            ->with(['user'])
             ->has('user')
             ->notOwner($user['id'])
             ->userType($user['type'])
@@ -285,7 +291,8 @@ class HomeController extends Controller
 
     public function requestPartnership(Request $request) {
         $user = auth()->user();
-        $contact = Contact::with(['user'])
+        $contact = Contact::query()
+            ->with(['user'])
             ->has('user')
             ->where('id', $request['contact'])
             ->notOwner($user['id'])
@@ -342,7 +349,8 @@ class HomeController extends Controller
                 'success' => false,
             ], 403);
         }
-        $contact = Contact::with(['user'])
+        $contact = Contact::query()
+            ->with(['user'])
             ->has('user')
             ->where('id', $request['contact'])
             ->notOwner($user['id'])
@@ -373,7 +381,8 @@ class HomeController extends Controller
             ], 404);
         }
         $creator = null;
-        $opportunities = Opportunity::where('user_id', '<>', $user['id'])
+        $opportunities = Opportunity::query()
+            ->where('user_id', '<>', $user['id'])
             ->whereIn('id', $opportunityIds)
             ->get();
         foreach ($opportunities as $opportunity) {
@@ -430,7 +439,8 @@ class HomeController extends Controller
                 'success' => false,
             ], 403);
         }
-        $contact = Contact::has('user')
+        $contact = Contact::query()
+            ->has('user')
             ->where('id', $request['contact'])
             ->notOwner($user['id'])
             ->userType($user['type'])
@@ -441,7 +451,7 @@ class HomeController extends Controller
                 'success' => false,
             ], 404);
         }
-        SubRecord::create([
+        SubRecord::query()->create([
             'user_id'       => $user['id'],
             'contact_id'    => $contact['id'],
         ]);

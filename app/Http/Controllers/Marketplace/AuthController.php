@@ -62,7 +62,7 @@ class AuthController extends Controller
     }
 
     public function joinAsBrand() {
-        $networks = Network::get();
+        $networks = Network::query()->get();
         return view('marketplace.auth.join-as-brand', [
             'networks' => $networks,
         ]);
@@ -104,7 +104,7 @@ class AuthController extends Controller
             return back()->withErrors($validator)->withInput();
         }
         $claim = $request['claim'];
-        $contact = Contact::where('domain', $domain)->first();
+        $contact = Contact::query()->where('domain', $domain)->first();
         $error = '';
         if ($contact) {
             if ($claim) {
@@ -122,13 +122,13 @@ class AuthController extends Controller
             $validator->errors()->add('domain', $error);
             return back()->withErrors($validator)->withInput();
         }
-        $user = User::create([
+        $user = User::query()->create([
             'name'      => $request['brand_name'],
             'email'     => $request['email'],
             'password'  => bcrypt($request['password']),
             'type'      => 'Brand',
         ]);
-        $referral = ReferralCode::where('code', $request['refer'])->first();
+        $referral = ReferralCode::query()->where('code', $request['refer'])->first();
         $user->info()->create([
             'referral_code_id' => $referral['id'] ?? null,
         ]);
@@ -211,7 +211,7 @@ class AuthController extends Controller
             return back()->withErrors($validator)->withInput();
         }
         $claim = $request['claim'];
-        $contact = Contact::where('domain', $domain)->first();
+        $contact = Contact::query()->where('domain', $domain)->first();
         $error = '';
         if ($contact) {
             if ($claim) {
@@ -229,13 +229,13 @@ class AuthController extends Controller
             $validator->errors()->add('domain', $error);
             return back()->withErrors($validator)->withInput();
         }
-        $user = User::create([
+        $user = User::query()->create([
             'name'      => $claim ? $contact['name'] : $request['website_name'],
             'email'     => $request['email'],
             'password'  => bcrypt($request['password']),
             'type'      => 'Creator',
         ]);
-        $referral = ReferralCode::where('code', $request['refer'])->first();
+        $referral = ReferralCode::query()->where('code', $request['refer'])->first();
         $user->info()->create([
             'referral_code_id' => $referral['id'] ?? null,
         ]);
@@ -332,7 +332,7 @@ class AuthController extends Controller
                 'error_message' => 'This reset link is already expired. Please try again.',
             ]);
         }
-        $user = User::where('email', $password_reset['email'])->first();
+        $user = User::query()->where('email', $password_reset['email'])->first();
         if (!$user) {
             $password_reset->delete();
             return view('marketplace.auth.not-found', [
@@ -352,7 +352,7 @@ class AuthController extends Controller
             $password_reset->save();
             return back()->with('error_message', 'This reset link is already expired. Please try again.');
         }
-        $user = User::where('email', $password_reset['email'])->first();
+        $user = User::query()->where('email', $password_reset['email'])->first();
         if (!$user) {
             $password_reset->delete();
             return back()->with('error_message', 'Your reset request is invalid. Your account does not exist anymore.');

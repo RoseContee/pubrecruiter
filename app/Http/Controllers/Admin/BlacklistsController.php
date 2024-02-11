@@ -22,7 +22,7 @@ class BlacklistsController extends Controller
      */
     public function index()
     {
-        $blacklists = Blacklist::get();
+        $blacklists = Blacklist::query()->get();
         return view('admin.blacklists.index', [
             'blacklists' => $blacklists,
         ]);
@@ -60,7 +60,7 @@ class BlacklistsController extends Controller
         if ($validator->fails()) {
             return back()->withErrors($validator)->withInput();
         }
-        Blacklist::updateOrCreate([
+        Blacklist::query()->updateOrCreate([
             'domain' => $domain
         ]);
         return back()->with('success_message', 'Website has been added to the blacklist.');
@@ -95,7 +95,7 @@ class BlacklistsController extends Controller
      */
     public function destroy($id)
     {
-        $website = Blacklist::where('id', $id)->first();
+        $website = Blacklist::query()->find($id);
         if (!$website) {
             return back()->with('error_message', 'Cannot find website information');
         }

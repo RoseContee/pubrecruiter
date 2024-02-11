@@ -23,7 +23,7 @@ class ResourcesController extends Controller
      */
     public function index()
     {
-        $resources = Resource::orderBy('created_at', 'desc')->get();
+        $resources = Resource::query()->orderBy('created_at', 'desc')->get();
         return view('admin.resources.index', [
             'resources' => $resources,
         ]);
@@ -67,7 +67,7 @@ class ResourcesController extends Controller
      */
     public function show($id)
     {
-        $resource = Resource::find($id);
+        $resource = Resource::query()->find($id);
         if (!$resource) {
             return back()->with('error_message', 'Cannot find resource information.');
         }
@@ -89,7 +89,7 @@ class ResourcesController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $resource = Resource::find($id);
+        $resource = Resource::query()->find($id);
         if (!$resource) {
             return back()->with('error_message', 'Cannot find resource information.');
         }
@@ -122,7 +122,7 @@ class ResourcesController extends Controller
      */
     public function destroy($id)
     {
-        $resource = Resource::find($id);
+        $resource = Resource::query()->find($id);
         if (!$resource) {
             return back()->with('error_message', 'Cannot find resource information.');
         }

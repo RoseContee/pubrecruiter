@@ -21,7 +21,8 @@ class OpportunityController extends Controller
      */
     public function index()
     {
-        $opportunities = Opportunity::with('user')
+        $opportunities = Opportunity::query()
+            ->with(['user'])
             ->orderBy('user_id')
             ->get();
         return view('admin.opportunities.index', [
@@ -74,7 +75,7 @@ class OpportunityController extends Controller
      */
     public function destroy($id)
     {
-        $opportunity = Opportunity::find($id);
+        $opportunity = Opportunity::query()->find($id);
         if (!$opportunity) {
             return back()->with('error_message', 'Cannot find opportunity information.');
         }

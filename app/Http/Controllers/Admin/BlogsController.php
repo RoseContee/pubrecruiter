@@ -19,7 +19,8 @@ class BlogsController extends Controller
     }
     public function index()
     {
-        $blogs = Blog::with(['comments'])
+        $blogs = Blog::query()
+            ->with(['comments'])
             ->orderBy('created_at', 'desc')
             ->get();
         return view('admin.blogs.index', [
@@ -46,7 +47,7 @@ class BlogsController extends Controller
         }
         $title = $request['title'];
         $slug = preg_replace('/[^a-zA-Z0-9-_]/', '-', $title);
-        while (Blog::where('slug', $slug)->exists()) $slug .= '-';
+        while (Blog::query()->where('slug', $slug)->exists()) $slug .= '-';
         $tags = implode(',', preg_split('/\s*,\s*/', $request['tags'], -1, PREG_SPLIT_NO_EMPTY));
         $blog = new Blog();
         $blog['title'] = $title;
@@ -61,7 +62,7 @@ class BlogsController extends Controller
 
     public function show($id)
     {
-        $blog = Blog::with([
+        $blog = Blog::query()->with([
             'comments' => function ($q) {
                 $q->orderBy('created_at', 'desc');
             }
@@ -76,7 +77,7 @@ class BlogsController extends Controller
 
     public function update(Request $request, $id)
     {
-        $blog = Blog::find($id);
+        $blog = Blog::query()->find($id);
         if (!$blog) {
             return back()->with('error_message', 'Cannot find blog information.');
         }
@@ -92,7 +93,7 @@ class BlogsController extends Controller
         }
         $title = $request['title'];
         $slug = preg_replace('/[^a-zA-Z0-9-_]/', '-', $title);
-        while (Blog::where('id', '<>', $id)->where('slug', $slug)->exists()) $slug .= '-';
+        while (Blog::query()->where('id', '<>', $id)->where('slug', $slug)->exists()) $slug .= '-';
         $tags = implode(',', preg_split('/\s*,\s*/', $request['tags'], -1, PREG_SPLIT_NO_EMPTY));
         $blog['title'] = $title;
         $blog['slug'] = $slug;
@@ -111,7 +112,7 @@ class BlogsController extends Controller
 
     public function destroy($id)
     {
-        $blog = Blog::find($id);
+        $blog = Blog::query()->find($id);
         if (!$blog) {
             return back()->with('error_message', 'Cannot find blog information.');
         }
@@ -123,9 +124,9 @@ class BlogsController extends Controller
     }
 
     public function deleteComment($id, $comment) {
-        $comment = BlogComment::where('blog_id', $id)
-            ->where('id', $comment)
-            ->first();
+        $comment = BlogComment::query()
+            ->where('blog_id', $id)
+            ->find($comment);
         if (!$comment) {
             return back()->with('error_message', 'Cannot find comment information.');
         }

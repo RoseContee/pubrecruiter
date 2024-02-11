@@ -69,8 +69,6 @@
                             </tr>
                             <tr>
                                 <td style="color:#000000;font-family:Helvetica,Arial,sans-serif;font-size:16px;font-weight:normal;line-height:1.5">
-                                    <p><strong style="font-style:italic;">While optional, we ask for a commission per recruit added into your Affiliate Program.
-                                            In addition, should an opportunity progress to an insertion order; we ask for a bounty.</strong></p>
                                     <p>One tip we would recommend is using our <a href="{{ $data['extension_link'] }}" target="_blank">Chrome Extension</a>.
                                         While it has many features to explore, the main one that we found useful
                                         for Brands is Flagging.</p>
