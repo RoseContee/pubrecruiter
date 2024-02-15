@@ -1,7 +1,7 @@
 {
     "name": "Pub Recruiter",
     "description": "Pub Recruiter",
-    "version": "1.0.0",
+    "version": "2.6.8",
     "manifest_version": 3,
     "icons": {
         "128": "/img/default-icon.png"

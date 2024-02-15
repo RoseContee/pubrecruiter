@@ -171,9 +171,9 @@ const ClearContact = () => {
 }
 
 const LoadContact = async () => {
+    if (!access_token) return GotoPage('auth')
     ToggleLoading(true)
     ClearContact()
-    if (!access_token) return GotoPage('auth')
     const tab = (await chrome.tabs.query({ active: true }))[0]
     console.log(tab)
     const url = new URL(tab.url)
@@ -201,6 +201,7 @@ const LoadContact = async () => {
         if (data.success) {
             let {details} = data, icon = (contact = details.contact) ? 'active' : 'default'
             chrome.action.setIcon({ tabId: tab.id, path: `/img/${icon}-icon.png` })
+            ToggleLoading(false)
             if (details.blacklist) return GotoPage('blacklist')
             if (!contact) {
                 !(nocontact = details.nocontact) && $('#no-contact').removeClass('disabled')
@@ -211,6 +212,7 @@ const LoadContact = async () => {
             let additional = '', opportunities = []
             if (category == 'Brand') {
                 $('.category-Brand').show(), $('.category-Creator').hide()
+                //$('.category-Brand').show(), $('.category-Affiliate').hide()
                 additional =
                     `<div class ="row mt-2">
                         <div class="col-4 font-weight-bold">Network:</div>
@@ -225,6 +227,7 @@ const LoadContact = async () => {
                     </div>`}`
             } else {
                 $('.category-Brand').hide(), $('.category-Creator').show()
+                //$('.category-Brand').hide(), $('.category-Affiliate').show()
                 try {
                     opportunities = JSON.parse(contact.opportunities)
                 } catch(e) {
@@ -362,17 +365,17 @@ const Login = () => {
             chrome.storage.local.set({
                 [APP]: { access_token: access_token = data.access_token }
             })
-            GetNotification()
             GotoPage('splash')
+            GetNotification()
         } else {
             $('#login-message').show().find('span').html(data.message)
-            ToggleLoading(false)
         }
+        ToggleLoading(false)
     })
 }
 
 const Logout = () => {
-    ClearContact(), GotoPage('auth')
+    ClearContact(), GotoPage('auth'), ToggleLoading(false)
     access_token = domain = contact = null
     nocontact = inquiry = feedback = true
     chrome.runtime.sendMessage({

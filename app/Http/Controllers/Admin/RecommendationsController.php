@@ -3,10 +3,13 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Mail\Recommendation as RecommendationMail;
 use App\Models\Contact;
 use App\Models\Recommendation;
+use App\Models\Setting;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\View;
 
@@ -60,27 +63,38 @@ class RecommendationsController extends Controller
         if ($validator->fails()) {
             return back()->withErrors($validator)->withInput()->with('error_message', 'Make sure all validation rules.');
         }
-        $selected_user = User::query()->find($user = $request['user']);
-        $selected_recommend = Contact::query()->find($recommend = $request['recommendation']);
+        $selected_user = User::query()->find($user_id = $request['user']);
+        $selected_recommend = Contact::query()->find($contact_id = $request['recommendation']);
         if ($selected_user['type'] == $selected_recommend['type']) {
             $validator->errors()->add('recommendation', 'The recommendation should not be same with the user.');
             return back()->withErrors($validator)->withInput()->with('error_message', 'Make sure all validation rules.');
         }
         if (Recommendation::query()
-            ->where('user_id', $user)
-            ->where('contact_id', $recommend)
+            ->where('user_id', $user_id)
+            ->where('contact_id', $contact_id)
             ->exists()
         ) {
             $validator->errors()->add('recommendation', 'The same recommendation already attached to the user.');
             return back()->withErrors($validator)->withInput()->with('error_message', 'Make sure all validation rules.');
         }
         $recommendation                  = new Recommendation();
-        $recommendation['user_id']       = $user;
-        $recommendation['contact_id']    = $recommend;
+        $recommendation['user_id']       = $user_id;
+        $recommendation['contact_id']    = $contact_id;
         $recommendation['email']         = $request['email'];
         $recommendation['note']          = $request['note'];
         $recommendation['response_time'] = $request['response_time'];
         $recommendation->save();
+        try {
+            $setting = Setting::getSetting(['site_name', 'site_logo']);
+            Mail::to($selected_user['email'])->send(new RecommendationMail([
+                'site_name'             => $setting['site_name'],
+                'site_logo'             => $setting['site_logo'],
+                'name'                  => $selected_recommend['name'],
+                'recommendation_email'  => $request['email'],
+                'note'                  => $request['note'],
+            ]));
+        } catch (\Exception $exception) {
+        }
         return redirect()->route('admin.recommendations.index')->with('success_message', 'New recommendation created!');
     }
 
@@ -115,7 +129,9 @@ class RecommendationsController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $recommendation = Recommendation::query()->find($id);
+        $recommendation = Recommendation::query()
+            ->with(['user', 'contact'])
+            ->find($id);
         if (!$recommendation) {
             return back()->with('error_message', 'Cannot find recommendation information.');
         }
@@ -131,6 +147,17 @@ class RecommendationsController extends Controller
         $recommendation['note']          = $request['note'];
         $recommendation['response_time'] = $request['response_time'];
         $recommendation->save();
+        try {
+            $setting = Setting::getSetting(['site_name', 'site_logo']);
+            Mail::to($recommendation['user']['email'])->send(new RecommendationMail([
+                'site_name'             => $setting['site_name'],
+                'site_logo'             => $setting['site_logo'],
+                'name'                  => $recommendation['contact']['name'],
+                'recommendation_email'  => $request['email'],
+                'note'                  => $request['note'],
+            ]));
+        } catch (\Exception $exception) {
+        }
         return back()->with('success_message', 'Recommendation updated!');
     }
 
