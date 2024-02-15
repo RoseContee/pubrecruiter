@@ -1,0 +1,116 @@
+@font-face {
+    font-family: 'Montserrat';
+    font-style: normal;
+    font-weight: 400;
+    font-display: block;
+    src: url("./font/Montserrat-Regular.ttf");
+}
+
+body {
+    width: 400px;
+    min-height: 250px;
+    font-family: 'Montserrat';
+}
+
+button:focus {
+    outline: none;
+}
+
+.hidden {
+    display: none;
+}
+
+.overflow-x-auto {
+    overflow-x: auto;
+}
+
+.word-break-all {
+    word-break: break-all;
+}
+
+.small, small {
+    font-size: 80%;
+    font-weight: 400;
+}
+
+.custom-control {
+    padding-left: 1.9rem;
+}
+
+#loading.overlay,
+#success-no-contact-loading.overlay,
+#failed-no-contact-loading.overlay {
+    position: fixed;
+    z-index: 1052;
+    background: rgba(192, 192, 192, 0.6);
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+#loading i,
+#success-no-contact-loading i,
+#failed-no-contact-loading i {
+    color: blue;
+    position: fixed;
+    left: 45%;
+    top: 40%;
+}
+
+.alert {
+    text-align: left;
+}
+
+.alert-dismissible .close {
+    padding: .98rem 1.25rem;
+    line-height: 0.5;
+}
+
+.response-time {
+    position: absolute;
+    top: -10px;
+}
+
+.hour1 {
+    left: 38px;
+    color: #00cb00;
+}
+
+.day1 {
+    left: 92px;
+    color: #4a50f3;
+}
+
+.week1 {
+    right: 44px;
+    color: #8942cb;
+}
+
+.month1 {
+    right: -15px;
+    color: #c50025;
+}
+
+#ads-support img {
+    width: 300px;
+    height: 45px;
+}
+
+.opportunities-page .form-control {
+    height: auto;
+    word-break: break-all;
+}
+
+.opportunities-page .input-group-text:first-child {
+    width: 85px;
+    white-space: break-spaces;
+    word-break: break-all;
+    justify-content: center;
+    line-height: 1.2;
+}
+
+.opportunities-page .input-group-text:last-child {
+    width: 45px;
+    justify-content: center;
+}

@@ -1,0 +1,22 @@
+{
+   "action": {
+      "default_popup": "/html/popup.html"
+   },
+   "background": {
+      "service_worker": "/js/background.js"
+   },
+   "content_security_policy": {
+      "extension_pages": "script-src 'self'; object-src 'self'"
+   },
+   "description": "Pub Recruiter",
+   "host_permissions": [ "*://extension.pubrecruiter.com/*" ],
+   "icons": {
+      "128": "/img/default-icon.png"
+   },
+   "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAqmqjLpfijthK4k3fyhAE7frRccp8qepIwSCygK2oha5haEVNXNMqdk8RJqdMLs2n6tKlyyXNnAkduj9t/e3hm9WpNdksNnk1t1Q0AerwLXXE/+NVbg7/cJ5RYTdIV0gfVeMXeDrCLeMYtkP08RcZIVuoe4u88XawnygLkNxL1zOmpv4gbaDIrfENx/0ZtXKGLZFG/QI8+zUVK481zoYxRi4ubIdU9XWwhDeoEJD1/PXVx8K6ZVkWDP+ZsKP5zLOrBtM6HRWuC1rPZQPFsCzBmceM15XLkc/sGGAbPwjeDWB4gUTr7TjQFVn2XasOxdtI9qyekSyydq1ycfFXO1XhCQIDAQAB",
+   "manifest_version": 3,
+   "name": "Pub Recruiter",
+   "permissions": [ "tabs", "activeTab", "storage" ],
+   "update_url": "https://clients2.google.com/service/update2/crx",
+   "version": "2.6.7"
+}
